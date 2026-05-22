@@ -1,11 +1,11 @@
-package foothaha.auth.controller;
+package foothaha.stepmate_back.auth.controller;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
-import foothaha.auth.dto.GoogleLoginRequest;
-import foothaha.auth.dto.UserResponse;
-import foothaha.auth.service.GoogleTokenVerifier;
-import foothaha.user.entity.User;
-import foothaha.user.service.UserService;
+import foothaha.stepmate_back.auth.dto.GoogleLoginRequest;
+import foothaha.stepmate_back.auth.dto.UserResponse;
+import foothaha.stepmate_back.auth.service.GoogleTokenVerifier;
+import foothaha.stepmate_back.user.entity.User;
+import foothaha.stepmate_back.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,12 +21,6 @@ public class AuthController {
     private final GoogleTokenVerifier googleTokenVerifier;
     private final UserService userService;
 
-    /**
-     * Google 로그인.
-     * 프론트엔드: POST /api/auth/google
-     *   body: { "idToken": "..." }
-     * 응답: { userId, email, name, profileImageUrl, provider }
-     */
     @PostMapping("/google")
     public ResponseEntity<?> loginWithGoogle(@RequestBody @Valid GoogleLoginRequest request) {
         GoogleIdToken.Payload payload = googleTokenVerifier.verify(request.getIdToken());
@@ -49,12 +43,6 @@ public class AuthController {
         log.info("Google 로그인 완료 userId={}, email={}", user.getUserId(), user.getEmail());
 
         return ResponseEntity.ok(UserResponse.from(user));
-    }
-
-    /** 헬스체크용 ping. */
-    @GetMapping("/ping")
-    public String ping() {
-        return "ok";
     }
 
     private record ErrorResponse(String code, String message) {}

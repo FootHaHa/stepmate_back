@@ -1,8 +1,8 @@
-package foothaha.user.service;
+package foothaha.stepmate_back.user.service;
 
-import foothaha.user.entity.AuthProvider;
-import foothaha.user.entity.User;
-import foothaha.user.repository.UserRepository;
+import foothaha.stepmate_back.user.entity.AuthProvider;
+import foothaha.stepmate_back.user.entity.User;
+import foothaha.stepmate_back.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

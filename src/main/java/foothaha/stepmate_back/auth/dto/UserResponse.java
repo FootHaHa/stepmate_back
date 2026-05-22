@@ -1,6 +1,6 @@
-package foothaha.auth.dto;
+package foothaha.stepmate_back.auth.dto;
 
-import foothaha.user.entity.User;
+import foothaha.stepmate_back.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

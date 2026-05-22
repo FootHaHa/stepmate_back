@@ -1,4 +1,4 @@
-package foothaha.auth.dto;
+package foothaha.stepmate_back.auth.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

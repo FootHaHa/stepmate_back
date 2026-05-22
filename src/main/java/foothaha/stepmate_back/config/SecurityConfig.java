@@ -1,4 +1,4 @@
-package foothaha.config;
+package foothaha.stepmate_back.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

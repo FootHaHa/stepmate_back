@@ -1,7 +1,7 @@
-package foothaha.user.repository;
+package foothaha.stepmate_back.user.repository;
 
-import foothaha.user.entity.AuthProvider;
-import foothaha.user.entity.User;
+import foothaha.stepmate_back.user.entity.AuthProvider;
+import foothaha.stepmate_back.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,5 +1,6 @@
 package foothaha.stepmate_back.user.service;
 
+import foothaha.stepmate_back.user.dto.UserResponse;
 import foothaha.stepmate_back.user.entity.AuthProvider;
 import foothaha.stepmate_back.user.entity.User;
 import foothaha.stepmate_back.user.repository.UserRepository;
@@ -59,4 +60,13 @@ public class UserService {
                 .build();
         return userRepository.save(user);
     }
+
+    @Transactional
+    public UserResponse findMyInfo(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+        return UserResponse.from(user);
+    }
+
 }

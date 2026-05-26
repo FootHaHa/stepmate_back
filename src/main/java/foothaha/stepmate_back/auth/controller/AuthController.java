@@ -4,6 +4,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import foothaha.stepmate_back.auth.dto.GoogleLoginRequest;
 import foothaha.stepmate_back.auth.dto.UserResponse;
 import foothaha.stepmate_back.auth.service.GoogleTokenVerifier;
+import foothaha.stepmate_back.config.JWTUtil;
 import foothaha.stepmate_back.response.CommonResponse;
 import foothaha.stepmate_back.response.ResponseBuilder;
 import foothaha.stepmate_back.response.ResponseCode;
@@ -24,6 +25,7 @@ public class AuthController {
 
     private final GoogleTokenVerifier googleTokenVerifier;
     private final UserService userService;
+    private final JWTUtil jwtUtil;
 
     @PostMapping("/google")
     public ResponseEntity<CommonResponse<UserResponse>> loginWithGoogle(@RequestBody @Valid GoogleLoginRequest request) {
@@ -46,6 +48,8 @@ public class AuthController {
         User user = userService.upsertGoogleUser(providerId, email, name, picture);
         log.info("Google 로그인 완료 userId={}, email={}", user.getUserId(), user.getEmail());
 
-        return ResponseEntity.ok(ResponseBuilder.success(UserResponse.from(user)));
+        String token = jwtUtil.createJwt(user.getEmail(), "ROLE_USER", 60 * 60 * 10 * 1000L);
+
+        return ResponseEntity.ok(ResponseBuilder.success(UserResponse.from(user, token)));
     }
 }

@@ -2,6 +2,7 @@ package foothaha.stepmate_back.run.controller;
 
 import foothaha.stepmate_back.response.CommonResponse;
 import foothaha.stepmate_back.response.ResponseBuilder;
+import foothaha.stepmate_back.run.dto.FinishSessionRequest;
 import foothaha.stepmate_back.run.dto.RunSessionStartResponse;
 import foothaha.stepmate_back.run.service.RunSessionService;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +27,8 @@ public class RunSessionController {
     @PatchMapping("/{runSessionId}/finish")
     public ResponseEntity<CommonResponse<Void>> finishRun(
             Authentication authentication,
-            @PathVariable Long runSessionId) {
-        runSessionService.finishRun(authentication.getName(), runSessionId);
+            @RequestBody FinishSessionRequest request) {
+        runSessionService.finishRun(authentication.getName(), request.getRunSessionId(), request.getTotalSteps());
         return ResponseEntity.ok(ResponseBuilder.success(null));
     }
 }

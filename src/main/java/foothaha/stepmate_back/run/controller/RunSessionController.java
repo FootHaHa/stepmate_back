@@ -4,6 +4,7 @@ import foothaha.stepmate_back.response.CommonResponse;
 import foothaha.stepmate_back.response.ResponseBuilder;
 import foothaha.stepmate_back.run.dto.FinishSessionRequest;
 import foothaha.stepmate_back.run.dto.RunSessionStartResponse;
+import foothaha.stepmate_back.run.dto.SessionSummaryResponse;
 import foothaha.stepmate_back.run.service.RunSessionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -30,5 +31,11 @@ public class RunSessionController {
             @RequestBody FinishSessionRequest request) {
         runSessionService.finishRun(authentication.getName(), request.getRunSessionId(), request.getTotalSteps());
         return ResponseEntity.ok(ResponseBuilder.success(null));
+    }
+
+    @GetMapping("/{runSessionId}/summary")
+    public ResponseEntity<CommonResponse<SessionSummaryResponse>> getSummary(
+            @PathVariable Long runSessionId) {
+        return ResponseEntity.ok(ResponseBuilder.success(runSessionService.getSummary(runSessionId)));
     }
 }

@@ -1,6 +1,7 @@
 package foothaha.stepmate_back.run.service;
 
 import foothaha.stepmate_back.run.dto.RunSessionStartResponse;
+import foothaha.stepmate_back.run.dto.SessionSummaryResponse;
 import foothaha.stepmate_back.run.entity.RunSession;
 import foothaha.stepmate_back.run.entity.RunSessionStatus;
 import foothaha.stepmate_back.run.entity.SessionSummary;
@@ -28,6 +29,12 @@ public class RunSessionService {
     private final SessionSummaryRepository sessionSummaryRepository;
     private final SensorRawDataRepository sensorRawDataRepository;
     private final UserRepository userRepository;
+
+    public SessionSummaryResponse getSummary(Long runSessionId) {
+        SessionSummary summary = sessionSummaryRepository.findByRunSession_SessionId(runSessionId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 세션의 요약 정보를 찾을 수 없습니다."));
+        return SessionSummaryResponse.from(summary);
+    }
 
     @Transactional
     public RunSessionStartResponse startRun(String email) {

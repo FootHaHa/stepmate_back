@@ -17,7 +17,7 @@ public class RunSession extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long session_id;
 
     // 측정한 사용자
     @ManyToOne(fetch = FetchType.LAZY)

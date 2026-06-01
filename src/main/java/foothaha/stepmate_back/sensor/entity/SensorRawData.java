@@ -1,6 +1,5 @@
 package foothaha.stepmate_back.sensor.entity;
 
-import foothaha.stepmate_back.base.BaseEntity;
 import foothaha.stepmate_back.run.entity.RunSession;
 import jakarta.persistence.*;
 import lombok.*;

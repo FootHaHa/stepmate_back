@@ -1,9 +1,13 @@
 package foothaha.stepmate_back.run.controller;
 
+import foothaha.stepmate_back.response.CommonResponse;
+import foothaha.stepmate_back.response.ResponseBuilder;
+import foothaha.stepmate_back.run.dto.RunSessionStartResponse;
 import foothaha.stepmate_back.run.service.RunSessionService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/run")
@@ -11,4 +15,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class RunSessionController {
 
     private final RunSessionService runSessionService;
+
+    @PostMapping
+    public ResponseEntity<CommonResponse<RunSessionStartResponse>> startRun(
+            Authentication authentication) {
+        RunSessionStartResponse response = runSessionService.startRun(authentication.getName());
+        return ResponseEntity.ok(ResponseBuilder.success(response));
+    }
+
+    @PatchMapping("/{runSessionId}/finish")
+    public ResponseEntity<CommonResponse<Void>> finishRun(
+            Authentication authentication,
+            @PathVariable Long runSessionId) {
+        runSessionService.finishRun(authentication.getName(), runSessionId);
+        return ResponseEntity.ok(ResponseBuilder.success(null));
+    }
 }

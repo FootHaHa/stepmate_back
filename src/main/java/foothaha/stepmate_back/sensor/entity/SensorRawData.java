@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class SensorRawData extends BaseEntity {
+public class SensorRawData {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,7 +1,6 @@
 package foothaha.stepmate_back.run.entity;
 
 import foothaha.stepmate_back.base.BaseEntity;
-import foothaha.stepmate_back.device.entity.Device;
 import foothaha.stepmate_back.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -39,14 +38,6 @@ public class RunSession extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private RunSessionStatus status;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "left_device_id", nullable = false)
-    private Device leftDevice;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "right_device_id", nullable = false)
-    private Device rightDevice;
 
     public void finish(LocalDateTime endedAt) {
         this.endedAt = endedAt;

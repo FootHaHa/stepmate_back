@@ -1,9 +1,7 @@
 package foothaha.stepmate_back.sensor.entity;
 
 import foothaha.stepmate_back.base.BaseEntity;
-import foothaha.stepmate_back.device.entity.Device;
 import foothaha.stepmate_back.run.entity.RunSession;
-import foothaha.stepmate_back.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,9 +23,12 @@ public class SensorRawData extends BaseEntity {
     @JoinColumn(name = "run_session_id", nullable = false)
     private RunSession runSession;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "device_id", nullable = false)
-    private Device device;
+    // =========================
+    // 왼발 / 오른발 판정
+    // =========================
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private FootSide footSide;
 
     // =========================
     // 측정 시간 값 (Flutter 기준)
@@ -73,4 +74,5 @@ public class SensorRawData extends BaseEntity {
 
     @Column
     private Double gyroZ;
+
 }

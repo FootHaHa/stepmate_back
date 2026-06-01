@@ -1,4 +1,4 @@
-package foothaha.stepmate_back.device.entity;
+package foothaha.stepmate_back.sensor.entity;
 
 public enum FootSide {
     LEFT,

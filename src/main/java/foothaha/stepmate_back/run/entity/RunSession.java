@@ -39,6 +39,9 @@ public class RunSession extends BaseEntity {
     @Column(nullable = false)
     private RunSessionStatus status;
 
+    @OneToOne(mappedBy = "runSession", fetch = FetchType.LAZY)
+    private SessionSummary sessionSummary;
+
     public void finish(LocalDateTime startedAt, LocalDateTime endedAt, Integer durationSeconds) {
         this.startedAt = startedAt;
         this.endedAt = endedAt;

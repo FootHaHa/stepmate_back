@@ -1,5 +1,7 @@
 package foothaha.stepmate_back.run.service;
 
+import foothaha.stepmate_back.run.dto.DailySessionResponse;
+import foothaha.stepmate_back.run.dto.MonthlySessionResponse;
 import foothaha.stepmate_back.run.dto.RunSessionStartResponse;
 import foothaha.stepmate_back.run.dto.SessionSummaryResponse;
 import foothaha.stepmate_back.run.entity.RunSession;
@@ -16,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -29,6 +32,25 @@ public class RunSessionService {
     private final SessionSummaryRepository sessionSummaryRepository;
     private final SensorRawDataRepository sensorRawDataRepository;
     private final UserRepository userRepository;
+
+    public MonthlySessionResponse getMonthlySessions(String email, int year, int month) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        List<LocalDate> dates = runSessionRepository.findDistinctDatesByUserAndYearAndMonth(
+                user, year, month, RunSessionStatus.FINISHED);
+        return new MonthlySessionResponse(dates);
+    }
+
+    public List<DailySessionResponse> getDailySessions(String email, LocalDate date) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        List<RunSession> sessions = runSessionRepository.findByUserAndDateWithSummary(
+                user,
+                date.atStartOfDay(),
+                date.plusDays(1).atStartOfDay(),
+                RunSessionStatus.FINISHED);
+        return sessions.stream().map(DailySessionResponse::from).toList();
+    }
 
     public SessionSummaryResponse getSummary(Long runSessionId) {
         SessionSummary summary = sessionSummaryRepository.findByRunSession_SessionId(runSessionId)

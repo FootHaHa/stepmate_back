@@ -43,7 +43,6 @@ public class RunSessionService {
 
         RunSession session = RunSession.builder()
                 .user(user)
-                .startedAt(LocalDateTime.now())
                 .status(RunSessionStatus.IN_PROGRESS)
                 .build();
 
@@ -51,7 +50,8 @@ public class RunSessionService {
     }
 
     @Transactional
-    public void finishRun(String email, Long runSessionId, Integer totalSteps) {
+    public void finishRun(String email, Long runSessionId, Integer totalSteps,
+                          LocalDateTime startedAt, LocalDateTime endedAt, Integer durationSeconds) {
         RunSession session = runSessionRepository.findById(runSessionId)
                 .orElseThrow(() -> new IllegalArgumentException("세션을 찾을 수 없습니다."));
 
@@ -59,7 +59,7 @@ public class RunSessionService {
             throw new IllegalArgumentException("본인의 세션만 종료할 수 있습니다.");
         }
 
-        session.finish(LocalDateTime.now());
+        session.finish(startedAt, endedAt, durationSeconds);
         createSummaries(session, totalSteps);
     }
 

@@ -25,7 +25,7 @@ public class RunSession extends BaseEntity {
     private User user;
 
     // 측정 시작 시간
-    @Column(nullable = false)
+    @Column
     private LocalDateTime startedAt;
 
     // 측정 종료 시간
@@ -39,9 +39,10 @@ public class RunSession extends BaseEntity {
     @Column(nullable = false)
     private RunSessionStatus status;
 
-    public void finish(LocalDateTime endedAt) {
+    public void finish(LocalDateTime startedAt, LocalDateTime endedAt, Integer durationSeconds) {
+        this.startedAt = startedAt;
         this.endedAt = endedAt;
-        this.durationSeconds = (int) java.time.Duration.between(this.startedAt, endedAt).getSeconds();
+        this.durationSeconds = durationSeconds;
         this.status = RunSessionStatus.FINISHED;
     }
 }

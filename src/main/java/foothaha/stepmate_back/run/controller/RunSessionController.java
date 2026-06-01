@@ -29,7 +29,8 @@ public class RunSessionController {
     public ResponseEntity<CommonResponse<Void>> finishRun(
             Authentication authentication,
             @RequestBody FinishSessionRequest request) {
-        runSessionService.finishRun(authentication.getName(), request.getRunSessionId(), request.getTotalSteps());
+        runSessionService.finishRun(authentication.getName(), request.getRunSessionId(), request.getTotalSteps(),
+                request.getStartedAt(), request.getEndedAt(), request.getDurationSeconds());
         return ResponseEntity.ok(ResponseBuilder.success(null));
     }
 

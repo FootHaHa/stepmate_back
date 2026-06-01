@@ -9,5 +9,5 @@ import java.util.Optional;
 @Repository
 public interface SessionSummaryRepository extends JpaRepository<SessionSummary, Long> {
 
-    Optional<SessionSummary> findByRunSessionId(Long runSessionId);
+    Optional<SessionSummary> findByRunSession_SessionId(Long runSessionId);
 }

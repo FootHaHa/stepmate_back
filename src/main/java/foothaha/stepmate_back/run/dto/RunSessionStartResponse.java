@@ -19,7 +19,7 @@ public class RunSessionStartResponse {
 
     public static RunSessionStartResponse from(RunSession session) {
         return RunSessionStartResponse.builder()
-                .runSessionId(session.getId())
+                .runSessionId(session.getSessionId())
                 .startedAt(session.getStartedAt())
                 .status(session.getStatus())
                 .build();

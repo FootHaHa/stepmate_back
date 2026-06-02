@@ -117,6 +117,7 @@
   "runSessionId": 1,
   "data": [
     {
+      "stepNumber": 1,
       "footSide": "LEFT",
       "measuredAt": "2026-06-01T10:00:00",
       "pressure1": 120,
@@ -131,6 +132,7 @@
       "gyroZ": -0.01
     },
     {
+      "stepNumber": 2,
       "footSide": "RIGHT",
       "measuredAt": "2026-06-01T10:00:00.100",
       "pressure1": 115,

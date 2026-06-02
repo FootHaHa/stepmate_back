@@ -23,6 +23,12 @@ public class SensorRawData {
     private RunSession runSession;
 
     // =========================
+    // 걸음 순서
+    // =========================
+    @Column(nullable = false)
+    private Integer stepNumber;
+
+    // =========================
     // 왼발 / 오른발 판정
     // =========================
     @Enumerated(EnumType.STRING)

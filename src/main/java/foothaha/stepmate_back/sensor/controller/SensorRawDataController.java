@@ -16,7 +16,6 @@ public class SensorRawDataController {
 
     private final SensorRawDataService sensorRawDataService;
 
-    @PostMapping("/batch")
     public ResponseEntity<CommonResponse<Void>> saveRawData(
             Authentication authentication,
             @RequestBody RawDataBatchRequest request

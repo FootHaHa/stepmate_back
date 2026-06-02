@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class SensorRawDataRequest {
 
+    private Integer stepNumber;
     private FootSide footSide;
     private LocalDateTime measuredAt;
 

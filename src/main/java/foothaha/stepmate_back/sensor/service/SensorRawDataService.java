@@ -31,6 +31,7 @@ public class SensorRawDataService {
         List<SensorRawData> entities = request.getData().stream()
                 .map(item -> SensorRawData.builder()
                         .runSession(session)
+                        .stepNumber(item.getStepNumber())
                         .footSide(item.getFootSide())
                         .measuredAt(item.getMeasuredAt())
                         .pressure1(item.getPressure1())

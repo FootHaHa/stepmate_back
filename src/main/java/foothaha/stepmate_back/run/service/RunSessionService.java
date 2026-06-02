@@ -141,6 +141,20 @@ public class RunSessionService {
                 .orElse(0.0);
     }
 
+    @Transactional
+    public void deleteSession(String email, Long runSessionId) {
+        RunSession session = runSessionRepository.findById(runSessionId)
+                .orElseThrow(() -> new IllegalArgumentException("세션을 찾을 수 없습니다."));
+
+        if (!session.getUser().getEmail().equals(email)) {
+            throw new IllegalArgumentException("본인의 세션만 삭제할 수 있습니다.");
+        }
+
+        sensorRawDataRepository.deleteAllByRunSession_SessionId(runSessionId);
+        sessionSummaryRepository.deleteByRunSession_SessionId(runSessionId);
+        runSessionRepository.delete(session);
+    }
+
     private double calcBalanceScore(double left, double right) {
         double total = left + right;
         if (total == 0) return 100.0;

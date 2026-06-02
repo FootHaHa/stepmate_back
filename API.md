@@ -79,6 +79,29 @@
 
 ---
 
+## 2-3. 달리기 세션 삭제
+
+### Request
+
+**DELETE** `/api/run/{runSessionId}`
+
+* Bearer Token 필요
+* Path Variable
+
+    * `runSessionId` : 삭제할 세션 ID
+
+### Response
+
+```json
+{
+  "code": "S200",
+  "message": "요청이 성공적으로 처리되었습니다.",
+  "data": null
+}
+```
+
+---
+
 # 3. 센서 데이터(Sensor)
 
 ## 3-1. 원시 데이터 일괄 전송

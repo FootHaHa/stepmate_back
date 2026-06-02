@@ -10,4 +10,6 @@ import java.util.List;
 public interface SensorRawDataRepository extends JpaRepository<SensorRawData, Long> {
 
     List<SensorRawData> findByRunSession_SessionId(Long sessionId);
+
+    void deleteAllByRunSession_SessionId(Long sessionId);
 }

@@ -54,6 +54,14 @@ public class RunSessionController {
                 runSessionService.getMonthlySessions(authentication.getName(), year, month)));
     }
 
+    @DeleteMapping("/{runSessionId}")
+    public ResponseEntity<CommonResponse<Void>> deleteSession(
+            Authentication authentication,
+            @PathVariable Long runSessionId) {
+        runSessionService.deleteSession(authentication.getName(), runSessionId);
+        return ResponseEntity.ok(ResponseBuilder.success(null));
+    }
+
     @GetMapping("/daily")
     public ResponseEntity<CommonResponse<List<DailySessionResponse>>> getDailySessions(
             Authentication authentication,

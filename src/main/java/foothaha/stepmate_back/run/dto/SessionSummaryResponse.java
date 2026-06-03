@@ -22,17 +22,17 @@ public class SessionSummaryResponse {
     private Integer totalSteps;
     private Double calories;
 
+    private Double avgHLLeft;
+    private Double avgM5Left;
+    private Double avgM1Left;
     private Double avgHeelLeft;
-    private Double avgMidLeft;
-    private Double avgToeLeft;
-    private Double avgOuterLeft;
-    private Double avgMeta1Left;
+    private Double avgMFLeft;
 
+    private Double avgHLRight;
+    private Double avgM5Right;
+    private Double avgM1Right;
     private Double avgHeelRight;
-    private Double avgMidRight;
-    private Double avgToeRight;
-    private Double avgOuterRight;
-    private Double avgMeta1Right;
+    private Double avgMFRight;
 
     private Double avgLeftPressure;
     private Double avgRightPressure;
@@ -48,16 +48,16 @@ public class SessionSummaryResponse {
                 .durationSeconds(summary.getRunSession().getDurationSeconds())
                 .totalSteps(summary.getTotalSteps())
                 .calories(summary.getCalories())
+                .avgHLLeft(summary.getAvgHLLeft())
+                .avgM5Left(summary.getAvgM5Left())
+                .avgM1Left(summary.getAvgM1Left())
                 .avgHeelLeft(summary.getAvgHeelLeft())
-                .avgMidLeft(summary.getAvgMidLeft())
-                .avgToeLeft(summary.getAvgToeLeft())
-                .avgOuterLeft(summary.getAvgOuterLeft())
-                .avgMeta1Left(summary.getAvgMeta1Left())
+                .avgMFLeft(summary.getAvgMFLeft())
+                .avgHLRight(summary.getAvgHLRight())
+                .avgM5Right(summary.getAvgM5Right())
+                .avgM1Right(summary.getAvgM1Right())
                 .avgHeelRight(summary.getAvgHeelRight())
-                .avgMidRight(summary.getAvgMidRight())
-                .avgToeRight(summary.getAvgToeRight())
-                .avgOuterRight(summary.getAvgOuterRight())
-                .avgMeta1Right(summary.getAvgMeta1Right())
+                .avgMFRight(summary.getAvgMFRight())
                 .avgLeftPressure(summary.getAvgLeftPressure())
                 .avgRightPressure(summary.getAvgRightPressure())
                 .balanceScore(summary.getBalanceScore())

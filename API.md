@@ -106,6 +106,16 @@
 
 ## 3-1. 원시 데이터 일괄 전송
 
+### 압력 센서 매핑
+
+| 필드 | 위치 |
+| ---- | ---- |
+| `pressure1` | 엄지발가락 (HL) |
+| `pressure2` | 5번째 중족골 (M5) |
+| `pressure3` | 1번째 중족골 (M1) |
+| `pressure4` | 발 뒤꿈치 (heel) |
+| `pressure5` | 중족부 (MF) |
+
 ### Request
 
 **POST** `/api/sensor/batch`
@@ -124,6 +134,7 @@
       "pressure2": 135,
       "pressure3": 98,
       "pressure4": 110,
+      "pressure5": 95,
       "accelX": 0.12,
       "accelY": -0.34,
       "accelZ": 9.81,
@@ -139,6 +150,7 @@
       "pressure2": 130,
       "pressure3": 100,
       "pressure4": 108,
+      "pressure5": 90,
       "accelX": -0.05,
       "accelY": 0.20,
       "accelZ": 9.79,
@@ -187,19 +199,21 @@
     "totalSteps": 3200,
     "calories": 128.0,
 
+    "avgHLLeft": 245.1,
+    "avgM5Left": 198.7,
+    "avgM1Left": 87.3,
     "avgHeelLeft": 312.4,
-    "avgMidLeft": 198.7,
-    "avgToeLeft": 245.1,
-    "avgOuterLeft": 87.3,
+    "avgMFLeft": 102.5,
 
+    "avgHLRight": 231.9,
+    "avgM5Right": 210.2,
+    "avgM1Right": 91.5,
     "avgHeelRight": 298.6,
-    "avgMidRight": 210.2,
-    "avgToeRight": 231.9,
-    "avgOuterRight": 91.5,
+    "avgMFRight": 98.3,
 
-    "avgLeftPressure": 210.875,
-    "avgRightPressure": 208.05,
-    "balanceScore": 99.33
+    "avgLeftPressure": 189.2,
+    "avgRightPressure": 186.1,
+    "balanceScore": 99.17
   }
 }
 ```

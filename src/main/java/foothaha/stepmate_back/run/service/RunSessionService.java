@@ -95,20 +95,20 @@ public class RunSessionService {
                 .filter(d -> d.getFootSide() == FootSide.RIGHT)
                 .toList();
 
-        double avgToeLeft    = avg(leftData,  SensorRawData::getPressure1);
-        double avgMidLeft    = avg(leftData,  SensorRawData::getPressure2);
-        double avgOuterLeft  = avg(leftData,  SensorRawData::getPressure3);
-        double avgHeelLeft   = avg(leftData,  SensorRawData::getPressure4);
-        double avgMeta1Left  = avg(leftData,  SensorRawData::getPressure5);
+        double avgHLLeft    = avg(leftData,  SensorRawData::getPressure1);
+        double avgM5Left    = avg(leftData,  SensorRawData::getPressure2);
+        double avgM1Left    = avg(leftData,  SensorRawData::getPressure3);
+        double avgHeelLeft  = avg(leftData,  SensorRawData::getPressure4);
+        double avgMFLeft    = avg(leftData,  SensorRawData::getPressure5);
 
-        double avgToeRight   = avg(rightData, SensorRawData::getPressure1);
-        double avgMidRight   = avg(rightData, SensorRawData::getPressure2);
-        double avgOuterRight = avg(rightData, SensorRawData::getPressure3);
-        double avgHeelRight  = avg(rightData, SensorRawData::getPressure4);
-        double avgMeta1Right = avg(rightData, SensorRawData::getPressure5);
+        double avgHLRight   = avg(rightData, SensorRawData::getPressure1);
+        double avgM5Right   = avg(rightData, SensorRawData::getPressure2);
+        double avgM1Right   = avg(rightData, SensorRawData::getPressure3);
+        double avgHeelRight = avg(rightData, SensorRawData::getPressure4);
+        double avgMFRight   = avg(rightData, SensorRawData::getPressure5);
 
-        double avgLeftPressure  = (avgHeelLeft  + avgMidLeft  + avgToeLeft  + avgOuterLeft  + avgMeta1Left)  / 5.0;
-        double avgRightPressure = (avgHeelRight + avgMidRight + avgToeRight + avgOuterRight + avgMeta1Right) / 5.0;
+        double avgLeftPressure  = (avgHLLeft  + avgM5Left  + avgM1Left  + avgHeelLeft  + avgMFLeft)  / 5.0;
+        double avgRightPressure = (avgHLRight + avgM5Right + avgM1Right + avgHeelRight + avgMFRight) / 5.0;
 
         double balanceScore = calcBalanceScore(avgLeftPressure, avgRightPressure);
         // 몸무게 추가해야 함
@@ -118,16 +118,16 @@ public class RunSessionService {
                 .runSession(session)
                 .totalSteps(totalSteps)
                 .calories(calories)
+                .avgHLLeft(avgHLLeft)
+                .avgM5Left(avgM5Left)
+                .avgM1Left(avgM1Left)
                 .avgHeelLeft(avgHeelLeft)
-                .avgMidLeft(avgMidLeft)
-                .avgToeLeft(avgToeLeft)
-                .avgOuterLeft(avgOuterLeft)
-                .avgMeta1Left(avgMeta1Left)
+                .avgMFLeft(avgMFLeft)
+                .avgHLRight(avgHLRight)
+                .avgM5Right(avgM5Right)
+                .avgM1Right(avgM1Right)
                 .avgHeelRight(avgHeelRight)
-                .avgMidRight(avgMidRight)
-                .avgToeRight(avgToeRight)
-                .avgOuterRight(avgOuterRight)
-                .avgMeta1Right(avgMeta1Right)
+                .avgMFRight(avgMFRight)
                 .avgLeftPressure(avgLeftPressure)
                 .avgRightPressure(avgRightPressure)
                 .balanceScore(balanceScore)

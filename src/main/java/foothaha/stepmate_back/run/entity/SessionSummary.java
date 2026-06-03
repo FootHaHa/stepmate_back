@@ -42,17 +42,17 @@ public class SessionSummary extends BaseEntity {
     // =========================
 
     // 평균값
+    private Double avgHLLeft;
+    private Double avgM5Left;
+    private Double avgM1Left;
     private Double avgHeelLeft;
-    private Double avgMidLeft;
-    private Double avgToeLeft;
-    private Double avgOuterLeft;
-    private Double avgMeta1Left;
+    private Double avgMFLeft;
 
+    private Double avgHLRight;
+    private Double avgM5Right;
+    private Double avgM1Right;
     private Double avgHeelRight;
-    private Double avgMidRight;
-    private Double avgToeRight;
-    private Double avgOuterRight;
-    private Double avgMeta1Right;
+    private Double avgMFRight;
 
     private Double avgLeftPressure;
     private Double avgRightPressure;

@@ -42,13 +42,13 @@ public class SessionSummary extends BaseEntity {
     // =========================
 
     // 평균값
-    private Double avgHLLeft;
+    private Double avgT1Left;
     private Double avgM5Left;
     private Double avgM1Left;
     private Double avgHeelLeft;
     private Double avgMFLeft;
 
-    private Double avgHLRight;
+    private Double avgT1Right;
     private Double avgM5Right;
     private Double avgM1Right;
     private Double avgHeelRight;
@@ -58,5 +58,11 @@ public class SessionSummary extends BaseEntity {
     private Double avgRightPressure;
 
     private Double balanceScore;
+
+    @Enumerated(EnumType.STRING)
+    private LandingType leftLandingType;
+
+    @Enumerated(EnumType.STRING)
+    private LandingType rightLandingType;
 
 }

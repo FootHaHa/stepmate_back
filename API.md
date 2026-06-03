@@ -110,7 +110,7 @@
 
 | 필드 | 위치 |
 | ---- | ---- |
-| `pressure1` | 엄지발가락 (HL) |
+| `pressure1` | 엄지발가락 (T1) |
 | `pressure2` | 5번째 중족골 (M5) |
 | `pressure3` | 1번째 중족골 (M1) |
 | `pressure4` | 발 뒤꿈치 (heel) |
@@ -184,6 +184,14 @@
 
 * Bearer Token 필요
 
+### LandingType 값 설명
+
+| 값 | 설명 |
+| --- | --- |
+| `CLASS1` | 엄지발가락 신전형 |
+| `CLASS2` | 중족부-외측 전족부 추진형 |
+| `CLASS3` | 일반형 |
+
 ### Response
 
 ```json
@@ -199,13 +207,13 @@
     "totalSteps": 3200,
     "calories": 128.0,
 
-    "avgHLLeft": 245.1,
+    "avgT1Left": 245.1,
     "avgM5Left": 198.7,
     "avgM1Left": 87.3,
     "avgHeelLeft": 312.4,
     "avgMFLeft": 102.5,
 
-    "avgHLRight": 231.9,
+    "avgT1Right": 231.9,
     "avgM5Right": 210.2,
     "avgM1Right": 91.5,
     "avgHeelRight": 298.6,
@@ -213,7 +221,10 @@
 
     "avgLeftPressure": 189.2,
     "avgRightPressure": 186.1,
-    "balanceScore": 99.17
+    "balanceScore": 99.17,
+
+    "leftLandingType": "CLASS3",
+    "rightLandingType": "CLASS1"
   }
 }
 ```

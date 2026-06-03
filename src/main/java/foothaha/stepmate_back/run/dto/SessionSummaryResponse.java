@@ -1,5 +1,6 @@
 package foothaha.stepmate_back.run.dto;
 
+import foothaha.stepmate_back.run.entity.LandingType;
 import foothaha.stepmate_back.run.entity.SessionSummary;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,13 +23,13 @@ public class SessionSummaryResponse {
     private Integer totalSteps;
     private Double calories;
 
-    private Double avgHLLeft;
+    private Double avgT1Left;
     private Double avgM5Left;
     private Double avgM1Left;
     private Double avgHeelLeft;
     private Double avgMFLeft;
 
-    private Double avgHLRight;
+    private Double avgT1Right;
     private Double avgM5Right;
     private Double avgM1Right;
     private Double avgHeelRight;
@@ -39,6 +40,9 @@ public class SessionSummaryResponse {
 
     private Double balanceScore;
 
+    private LandingType leftLandingType;
+    private LandingType rightLandingType;
+
     public static SessionSummaryResponse from(SessionSummary summary) {
         return SessionSummaryResponse.builder()
                 .summaryId(summary.getSummaryId())
@@ -48,12 +52,12 @@ public class SessionSummaryResponse {
                 .durationSeconds(summary.getRunSession().getDurationSeconds())
                 .totalSteps(summary.getTotalSteps())
                 .calories(summary.getCalories())
-                .avgHLLeft(summary.getAvgHLLeft())
+                .avgT1Left(summary.getAvgT1Left())
                 .avgM5Left(summary.getAvgM5Left())
                 .avgM1Left(summary.getAvgM1Left())
                 .avgHeelLeft(summary.getAvgHeelLeft())
                 .avgMFLeft(summary.getAvgMFLeft())
-                .avgHLRight(summary.getAvgHLRight())
+                .avgT1Right(summary.getAvgT1Right())
                 .avgM5Right(summary.getAvgM5Right())
                 .avgM1Right(summary.getAvgM1Right())
                 .avgHeelRight(summary.getAvgHeelRight())
@@ -61,6 +65,8 @@ public class SessionSummaryResponse {
                 .avgLeftPressure(summary.getAvgLeftPressure())
                 .avgRightPressure(summary.getAvgRightPressure())
                 .balanceScore(summary.getBalanceScore())
+                .leftLandingType(summary.getLeftLandingType())
+                .rightLandingType(summary.getRightLandingType())
                 .build();
     }
 }

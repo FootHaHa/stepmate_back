@@ -4,6 +4,7 @@ import foothaha.stepmate_back.run.dto.DailySessionResponse;
 import foothaha.stepmate_back.run.dto.MonthlySessionResponse;
 import foothaha.stepmate_back.run.dto.RunSessionStartResponse;
 import foothaha.stepmate_back.run.dto.SessionSummaryResponse;
+import foothaha.stepmate_back.run.entity.LandingType;
 import foothaha.stepmate_back.run.entity.RunSession;
 import foothaha.stepmate_back.run.entity.RunSessionStatus;
 import foothaha.stepmate_back.run.entity.SessionSummary;
@@ -18,10 +19,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -95,35 +101,38 @@ public class RunSessionService {
                 .filter(d -> d.getFootSide() == FootSide.RIGHT)
                 .toList();
 
-        double avgHLLeft    = avg(leftData,  SensorRawData::getPressure1);
+        double avgT1Left    = avg(leftData,  SensorRawData::getPressure1);
         double avgM5Left    = avg(leftData,  SensorRawData::getPressure2);
         double avgM1Left    = avg(leftData,  SensorRawData::getPressure3);
         double avgHeelLeft  = avg(leftData,  SensorRawData::getPressure4);
         double avgMFLeft    = avg(leftData,  SensorRawData::getPressure5);
 
-        double avgHLRight   = avg(rightData, SensorRawData::getPressure1);
+        double avgT1Right   = avg(rightData, SensorRawData::getPressure1);
         double avgM5Right   = avg(rightData, SensorRawData::getPressure2);
         double avgM1Right   = avg(rightData, SensorRawData::getPressure3);
         double avgHeelRight = avg(rightData, SensorRawData::getPressure4);
         double avgMFRight   = avg(rightData, SensorRawData::getPressure5);
 
-        double avgLeftPressure  = (avgHLLeft  + avgM5Left  + avgM1Left  + avgHeelLeft  + avgMFLeft)  / 5.0;
-        double avgRightPressure = (avgHLRight + avgM5Right + avgM1Right + avgHeelRight + avgMFRight) / 5.0;
+        double avgLeftPressure  = (avgT1Left  + avgM5Left  + avgM1Left  + avgHeelLeft  + avgMFLeft)  / 5.0;
+        double avgRightPressure = (avgT1Right + avgM5Right + avgM1Right + avgHeelRight + avgMFRight) / 5.0;
 
         double balanceScore = calcBalanceScore(avgLeftPressure, avgRightPressure);
         // 몸무게 추가해야 함
         double calories = totalSteps * 0.04;
 
+        LandingType leftLandingType  = classifyFoot(leftData);
+        LandingType rightLandingType = classifyFoot(rightData);
+
         SessionSummary summary = SessionSummary.builder()
                 .runSession(session)
                 .totalSteps(totalSteps)
                 .calories(calories)
-                .avgHLLeft(avgHLLeft)
+                .avgT1Left(avgT1Left)
                 .avgM5Left(avgM5Left)
                 .avgM1Left(avgM1Left)
                 .avgHeelLeft(avgHeelLeft)
                 .avgMFLeft(avgMFLeft)
-                .avgHLRight(avgHLRight)
+                .avgT1Right(avgT1Right)
                 .avgM5Right(avgM5Right)
                 .avgM1Right(avgM1Right)
                 .avgHeelRight(avgHeelRight)
@@ -131,6 +140,8 @@ public class RunSessionService {
                 .avgLeftPressure(avgLeftPressure)
                 .avgRightPressure(avgRightPressure)
                 .balanceScore(balanceScore)
+                .leftLandingType(leftLandingType)
+                .rightLandingType(rightLandingType)
                 .build();
 
         sessionSummaryRepository.save(summary);
@@ -157,6 +168,62 @@ public class RunSessionService {
         sensorRawDataRepository.deleteAllByRunSession_SessionId(runSessionId);
         sessionSummaryRepository.deleteByRunSession_SessionId(runSessionId);
         runSessionRepository.delete(session);
+    }
+
+    private LandingType classifyFoot(List<SensorRawData> footData) {
+        Map<Integer, List<SensorRawData>> stepGroups = footData.stream()
+                .collect(Collectors.groupingBy(SensorRawData::getStepNumber));
+
+        List<LandingType> perStepTypes = stepGroups.values().stream()
+                .map(this::classifyStep)
+                .toList();
+
+        return majorityVote(perStepTypes);
+    }
+
+    private LandingType classifyStep(List<SensorRawData> readings) {
+        List<SensorRawData> sorted = readings.stream()
+                .sorted(Comparator.comparing(SensorRawData::getMeasuredAt))
+                .toList();
+
+        double t1Impulse = 0, m5Impulse = 0, m1Impulse = 0, mfImpulse = 0;
+
+        for (int i = 0; i < sorted.size() - 1; i++) {
+            SensorRawData curr = sorted.get(i);
+            SensorRawData next = sorted.get(i + 1);
+            double dt = Duration.between(curr.getMeasuredAt(), next.getMeasuredAt()).toMillis();
+
+            t1Impulse += midpoint(curr.getPressure1(), next.getPressure1()) * dt;
+            m5Impulse += midpoint(curr.getPressure2(), next.getPressure2()) * dt;
+            m1Impulse += midpoint(curr.getPressure3(), next.getPressure3()) * dt;
+            mfImpulse += midpoint(curr.getPressure5(), next.getPressure5()) * dt;
+        }
+
+        return classify(t1Impulse, m5Impulse, m1Impulse, mfImpulse);
+    }
+
+    private double midpoint(Integer a, Integer b) {
+        return ((a == null ? 0 : a) + (b == null ? 0 : b)) / 2.0;
+    }
+
+    private LandingType classify(double t1, double m5, double m1, double mf) {
+        double score1 = 0.145 * t1 + 0.270 * m1 + 0.115 * m5 + 0.091 * mf - 13.789;
+        double score2 = 0.0082 * t1 + 0.120 * m1 + 0.047 * m5 + 0.348 * mf - 12.973;
+        double score3 = 0.090 * t1 + 0.092 * m1 + 0.088 * m5 + 0.066 * mf -  4.422;
+
+        if (score1 >= score2 && score1 >= score3) return LandingType.CLASS1;
+        if (score2 >= score3) return LandingType.CLASS2;
+        return LandingType.CLASS3;
+    }
+
+    private LandingType majorityVote(List<LandingType> types) {
+        if (types.isEmpty()) return LandingType.CLASS3;
+        return types.stream()
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                .entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey)
+                .orElse(LandingType.CLASS3);
     }
 
     private double calcBalanceScore(double left, double right) {

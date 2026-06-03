@@ -42,8 +42,16 @@ public class RunSessionService {
     public MonthlySessionResponse getMonthlySessions(String email, int year, int month) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
-        List<LocalDate> dates = runSessionRepository.findDistinctDatesByUserAndYearAndMonth(
-                user, year, month, RunSessionStatus.FINISHED);
+        LocalDate monthStart = LocalDate.of(year, month, 1);
+        List<LocalDate> dates = runSessionRepository.findByUserAndMonth(
+                        user,
+                        monthStart.atStartOfDay(),
+                        monthStart.plusMonths(1).atStartOfDay(),
+                        RunSessionStatus.FINISHED)
+                .stream()
+                .map(session -> session.getStartedAt().toLocalDate())
+                .distinct()
+                .toList();
         return new MonthlySessionResponse(dates);
     }
 

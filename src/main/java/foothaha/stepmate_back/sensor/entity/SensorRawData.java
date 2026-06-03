@@ -56,6 +56,9 @@ public class SensorRawData {
     @Column
     private Integer pressure4;
 
+    @Column
+    private Integer pressure5;
+
     // =========================
     // 가속도 센서
     // =========================

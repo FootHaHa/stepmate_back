@@ -95,18 +95,20 @@ public class RunSessionService {
                 .filter(d -> d.getFootSide() == FootSide.RIGHT)
                 .toList();
 
-        double avgHeelLeft   = avg(leftData,  SensorRawData::getPressure1);
+        double avgToeLeft    = avg(leftData,  SensorRawData::getPressure1);
         double avgMidLeft    = avg(leftData,  SensorRawData::getPressure2);
-        double avgToeLeft    = avg(leftData,  SensorRawData::getPressure3);
-        double avgOuterLeft  = avg(leftData,  SensorRawData::getPressure4);
+        double avgOuterLeft  = avg(leftData,  SensorRawData::getPressure3);
+        double avgHeelLeft   = avg(leftData,  SensorRawData::getPressure4);
+        double avgMeta1Left  = avg(leftData,  SensorRawData::getPressure5);
 
-        double avgHeelRight  = avg(rightData, SensorRawData::getPressure1);
+        double avgToeRight   = avg(rightData, SensorRawData::getPressure1);
         double avgMidRight   = avg(rightData, SensorRawData::getPressure2);
-        double avgToeRight   = avg(rightData, SensorRawData::getPressure3);
-        double avgOuterRight = avg(rightData, SensorRawData::getPressure4);
+        double avgOuterRight = avg(rightData, SensorRawData::getPressure3);
+        double avgHeelRight  = avg(rightData, SensorRawData::getPressure4);
+        double avgMeta1Right = avg(rightData, SensorRawData::getPressure5);
 
-        double avgLeftPressure  = (avgHeelLeft  + avgMidLeft  + avgToeLeft  + avgOuterLeft)  / 4.0;
-        double avgRightPressure = (avgHeelRight + avgMidRight + avgToeRight + avgOuterRight) / 4.0;
+        double avgLeftPressure  = (avgHeelLeft  + avgMidLeft  + avgToeLeft  + avgOuterLeft  + avgMeta1Left)  / 5.0;
+        double avgRightPressure = (avgHeelRight + avgMidRight + avgToeRight + avgOuterRight + avgMeta1Right) / 5.0;
 
         double balanceScore = calcBalanceScore(avgLeftPressure, avgRightPressure);
         // 몸무게 추가해야 함
@@ -120,10 +122,12 @@ public class RunSessionService {
                 .avgMidLeft(avgMidLeft)
                 .avgToeLeft(avgToeLeft)
                 .avgOuterLeft(avgOuterLeft)
+                .avgMeta1Left(avgMeta1Left)
                 .avgHeelRight(avgHeelRight)
                 .avgMidRight(avgMidRight)
                 .avgToeRight(avgToeRight)
                 .avgOuterRight(avgOuterRight)
+                .avgMeta1Right(avgMeta1Right)
                 .avgLeftPressure(avgLeftPressure)
                 .avgRightPressure(avgRightPressure)
                 .balanceScore(balanceScore)

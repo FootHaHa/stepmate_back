@@ -26,11 +26,13 @@ public class SessionSummaryResponse {
     private Double avgMidLeft;
     private Double avgToeLeft;
     private Double avgOuterLeft;
+    private Double avgMeta1Left;
 
     private Double avgHeelRight;
     private Double avgMidRight;
     private Double avgToeRight;
     private Double avgOuterRight;
+    private Double avgMeta1Right;
 
     private Double avgLeftPressure;
     private Double avgRightPressure;
@@ -50,10 +52,12 @@ public class SessionSummaryResponse {
                 .avgMidLeft(summary.getAvgMidLeft())
                 .avgToeLeft(summary.getAvgToeLeft())
                 .avgOuterLeft(summary.getAvgOuterLeft())
+                .avgMeta1Left(summary.getAvgMeta1Left())
                 .avgHeelRight(summary.getAvgHeelRight())
                 .avgMidRight(summary.getAvgMidRight())
                 .avgToeRight(summary.getAvgToeRight())
                 .avgOuterRight(summary.getAvgOuterRight())
+                .avgMeta1Right(summary.getAvgMeta1Right())
                 .avgLeftPressure(summary.getAvgLeftPressure())
                 .avgRightPressure(summary.getAvgRightPressure())
                 .balanceScore(summary.getBalanceScore())

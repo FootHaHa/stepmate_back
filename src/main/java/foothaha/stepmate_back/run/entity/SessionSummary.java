@@ -46,11 +46,13 @@ public class SessionSummary extends BaseEntity {
     private Double avgMidLeft;
     private Double avgToeLeft;
     private Double avgOuterLeft;
+    private Double avgMeta1Left;
 
     private Double avgHeelRight;
     private Double avgMidRight;
     private Double avgToeRight;
     private Double avgOuterRight;
+    private Double avgMeta1Right;
 
     private Double avgLeftPressure;
     private Double avgRightPressure;

@@ -18,6 +18,7 @@ public class SensorRawDataRequest {
     private Integer pressure2;
     private Integer pressure3;
     private Integer pressure4;
+    private Integer pressure5;
 
     private Double accelX;
     private Double accelY;

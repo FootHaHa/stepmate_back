@@ -38,6 +38,7 @@ public class SensorRawDataService {
                         .pressure2(item.getPressure2())
                         .pressure3(item.getPressure3())
                         .pressure4(item.getPressure4())
+                        .pressure5(item.getPressure5())
                         .accelX(item.getAccelX())
                         .accelY(item.getAccelY())
                         .accelZ(item.getAccelZ())

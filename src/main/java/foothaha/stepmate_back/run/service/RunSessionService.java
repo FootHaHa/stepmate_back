@@ -211,9 +211,9 @@ public class RunSessionService {
         double score2 = 0.0082 * t1 + 0.120 * m1 + 0.047 * m5 + 0.348 * mf - 12.973;
         double score3 = 0.090 * t1 + 0.092 * m1 + 0.088 * m5 + 0.066 * mf -  4.422;
 
-        if (score1 >= score2 && score1 >= score3) return LandingType.CLASS1;
-        if (score2 >= score3) return LandingType.CLASS2;
-        return LandingType.CLASS3;
+        if (score3 >= score1 && score3 >= score2) return LandingType.CLASS3;
+        if (score1 >= score2) return LandingType.CLASS1;
+        return LandingType.CLASS2;
     }
 
     private LandingType majorityVote(List<LandingType> types) {

@@ -6,21 +6,19 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Builder
 @AllArgsConstructor
 public class RunSessionStartResponse {
 
     private Long runSessionId;
-    private LocalDateTime startedAt;
+    private String startedAt;
     private RunSessionStatus status;
 
     public static RunSessionStartResponse from(RunSession session) {
         return RunSessionStartResponse.builder()
                 .runSessionId(session.getSessionId())
-                .startedAt(session.getStartedAt())
+                .startedAt(session.getStartedAt() != null ? session.getStartedAt().toString() : null)
                 .status(session.getStatus())
                 .build();
     }

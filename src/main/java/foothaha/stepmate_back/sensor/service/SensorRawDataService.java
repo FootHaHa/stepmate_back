@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -33,7 +34,7 @@ public class SensorRawDataService {
                         .runSession(session)
                         .stepNumber(item.getStepNumber())
                         .footSide(item.getFootSide())
-                        .measuredAt(item.getMeasuredAt())
+                        .measuredAt(item.getMeasuredAt() != null ? LocalDateTime.parse(item.getMeasuredAt()) : null)
                         .pressure1(item.getPressure1())
                         .pressure2(item.getPressure2())
                         .pressure3(item.getPressure3())

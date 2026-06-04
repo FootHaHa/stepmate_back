@@ -1,11 +1,8 @@
 package foothaha.stepmate_back.sensor.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import foothaha.stepmate_back.sensor.entity.FootSide;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -14,8 +11,7 @@ public class SensorRawDataRequest {
     private Integer stepNumber;
     private FootSide footSide;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS")
-    private LocalDateTime measuredAt;
+    private String measuredAt;
 
     private Integer pressure1;
     private Integer pressure2;

@@ -6,8 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Builder
 @AllArgsConstructor
@@ -16,8 +14,8 @@ public class SessionSummaryResponse {
     private Long summaryId;
     private Long runSessionId;
 
-    private LocalDateTime startedAt;
-    private LocalDateTime endedAt;
+    private String startedAt;
+    private String endedAt;
     private Integer durationSeconds;
 
     private Integer totalSteps;
@@ -47,8 +45,8 @@ public class SessionSummaryResponse {
         return SessionSummaryResponse.builder()
                 .summaryId(summary.getSummaryId())
                 .runSessionId(summary.getRunSession().getSessionId())
-                .startedAt(summary.getRunSession().getStartedAt())
-                .endedAt(summary.getRunSession().getEndedAt())
+                .startedAt(summary.getRunSession().getStartedAt() != null ? summary.getRunSession().getStartedAt().toString() : null)
+                .endedAt(summary.getRunSession().getEndedAt() != null ? summary.getRunSession().getEndedAt().toString() : null)
                 .durationSeconds(summary.getRunSession().getDurationSeconds())
                 .totalSteps(summary.getTotalSteps())
                 .calories(summary.getCalories())

@@ -5,15 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Builder
 @AllArgsConstructor
 public class DailySessionResponse {
 
     private Long runSessionId;
-    private LocalDateTime startedAt;
+    private String startedAt;
     private Integer durationSeconds;
     private Integer totalSteps;
 
@@ -24,7 +22,7 @@ public class DailySessionResponse {
 
         return DailySessionResponse.builder()
                 .runSessionId(session.getSessionId())
-                .startedAt(session.getStartedAt())
+                .startedAt(session.getStartedAt() != null ? session.getStartedAt().toString() : null)
                 .durationSeconds(session.getDurationSeconds())
                 .totalSteps(steps)
                 .build();

@@ -347,10 +347,10 @@
 ```json
 {
   "code": "S200",
-  "message": "?붿껌???깃났?곸쑝濡?泥섎━?섏뿀?듬땲??",
+  "message": "요청이 성공적으로 처리되었습니다.",
   "data": {
     "email": "user@example.com",
-    "name": "?띻만??,
+    "name": "홍길동",
     "profileImageUrl": "https://example.com/profile.jpg",
     "weightKg": 72.5,
     "heightCm": 175.0,

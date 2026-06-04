@@ -18,6 +18,10 @@ public class UserResponse {
 
     private String profileImageUrl;
 
+    private Double weightKg;
+
+    private Double heightCm;
+
     private String provider;
 
     public static UserResponse from(User user) {
@@ -25,6 +29,8 @@ public class UserResponse {
                 .email(user.getEmail())
                 .name(user.getName())
                 .profileImageUrl(user.getProfileImageUrl())
+                .weightKg(user.getWeightKg())
+                .heightCm(user.getHeightCm())
                 .provider(user.getProvider().name())
                 .build();
     }

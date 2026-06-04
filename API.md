@@ -22,6 +22,8 @@
     "email": "user@example.com",
     "name": "홍길동",
     "profileImageUrl": "https://example.com/profile.jpg",
+    "weightKg": 60.0,
+    "heightCm": 170.0,
     "provider": "GOOGLE"
   }
 }
@@ -321,4 +323,38 @@
 | E500 | 서버 내부 오류가 발생했습니다.  |
 
 ```
+```
+
+---
+
+# User body info update
+
+## Request
+
+**PATCH** `/api/user/body-info`
+
+* Bearer Token required
+
+```json
+{
+  "weightKg": 72.5,
+  "heightCm": 175.0
+}
+```
+
+## Response
+
+```json
+{
+  "code": "S200",
+  "message": "?붿껌???깃났?곸쑝濡?泥섎━?섏뿀?듬땲??",
+  "data": {
+    "email": "user@example.com",
+    "name": "?띻만??,
+    "profileImageUrl": "https://example.com/profile.jpg",
+    "weightKg": 72.5,
+    "heightCm": 175.0,
+    "provider": "GOOGLE"
+  }
+}
 ```

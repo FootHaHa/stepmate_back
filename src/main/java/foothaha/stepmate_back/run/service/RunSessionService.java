@@ -127,8 +127,8 @@ public class RunSessionService {
         double avgRightPressure = (avgT1Right + avgM5Right + avgM1Right + avgHeelRight + avgMFRight) / 5.0;
 
         double balanceScore = calcBalanceScore(avgLeftPressure, avgRightPressure);
-        // 몸무게 추가해야 함
-        double calories = totalSteps * 0.04;
+        double weightKg = session.getUser().getWeightKg();
+        double calories = totalSteps * 0.0005 * weightKg;
 
         LandingType leftLandingType  = classifyFoot(leftData);
         LandingType rightLandingType = classifyFoot(rightData);

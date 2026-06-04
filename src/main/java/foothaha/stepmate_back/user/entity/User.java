@@ -38,6 +38,14 @@ public class User extends BaseEntity {
     @Column(name = "profile_image_url", length = 1024)
     private String profileImageUrl;
 
+    @Builder.Default
+    @Column(name = "weight_kg", nullable = false, columnDefinition = "double precision default 60.0")
+    private Double weightKg = 60.0;
+
+    @Builder.Default
+    @Column(name = "height_cm", nullable = false, columnDefinition = "double precision default 170.0")
+    private Double heightCm = 170.0;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private AuthProvider provider;

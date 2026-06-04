@@ -14,23 +14,13 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    /**
-     * Google 사용자 정보를 받아 DB에 upsert.
-     *
-     * - 같은 (provider, providerId) 가 이미 있으면: 이름/사진을 최신값으로 갱신.
-     * - 같은 email 만 있으면: 기존 행에 provider 정보를 붙여 연결.
-     * - 둘 다 없으면: 새 사용자 생성.
-     */
     @Transactional
     public User upsertGoogleUser(String providerId, String email, String name, String pictureUrl) {
-        // 1) provider + providerId 매칭 우선
         return userRepository.findByProviderAndProviderId(AuthProvider.GOOGLE, providerId)
                 .map(u -> updateProfile(u, email, name, pictureUrl))
                 .orElseGet(() ->
-                        // 2) email 매칭 → 기존 계정에 Google 연결
                         userRepository.findByEmail(email)
                                 .map(u -> linkGoogle(u, providerId, name, pictureUrl))
-                                // 3) 신규 생성
                                 .orElseGet(() -> createNew(providerId, email, name, pictureUrl))
                 );
     }
@@ -61,12 +51,23 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public UserResponse findMyInfo(String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
-
+        User user = findByEmail(email);
         return UserResponse.from(user);
+    }
+
+    @Transactional
+    public UserResponse updateBodyInfo(String email, Double weightKg, Double heightCm) {
+        User user = findByEmail(email);
+        user.setWeightKg(weightKg);
+        user.setHeightCm(heightCm);
+        return UserResponse.from(user);
+    }
+
+    private User findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
     }
 
 }

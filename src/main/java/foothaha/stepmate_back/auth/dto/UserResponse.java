@@ -19,6 +19,8 @@ public class UserResponse {
     private String email;
     private String name;
     private String profileImageUrl;
+    private Double weightKg;
+    private Double heightCm;
     private String provider;
     private String token;
 
@@ -28,6 +30,8 @@ public class UserResponse {
                 .email(user.getEmail())
                 .name(user.getName())
                 .profileImageUrl(user.getProfileImageUrl())
+                .weightKg(user.getWeightKg())
+                .heightCm(user.getHeightCm())
                 .provider(user.getProvider() == null ? null : user.getProvider().name())
                 .token(token)
                 .build();

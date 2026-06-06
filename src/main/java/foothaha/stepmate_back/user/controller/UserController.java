@@ -2,6 +2,7 @@ package foothaha.stepmate_back.user.controller;
 
 import foothaha.stepmate_back.response.CommonResponse;
 import foothaha.stepmate_back.response.ResponseBuilder;
+import foothaha.stepmate_back.user.dto.StreakResponse;
 import foothaha.stepmate_back.user.dto.UpdateBodyInfoRequest;
 import foothaha.stepmate_back.user.dto.UserResponse;
 import foothaha.stepmate_back.user.service.UserService;
@@ -28,6 +29,13 @@ public class UserController {
     public ResponseEntity<CommonResponse<UserResponse>> getMyInfo(Authentication authentication) {
         String email = authentication.getName();
         UserResponse response = userService.findMyInfo(email);
+        return ResponseEntity.ok(ResponseBuilder.success(response));
+    }
+
+    @GetMapping("/streak")
+    public ResponseEntity<CommonResponse<StreakResponse>> getStreak(Authentication authentication) {
+        String email = authentication.getName();
+        StreakResponse response = userService.getStreak(email);
         return ResponseEntity.ok(ResponseBuilder.success(response));
     }
 

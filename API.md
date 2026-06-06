@@ -31,6 +31,68 @@
 
 ---
 
+## 1-2. 신체 정보 수정
+
+### Request
+
+**PATCH** `/api/user/body-info`
+
+* Bearer Token 필요
+
+```json
+{
+  "weightKg": 72.5,
+  "heightCm": 175.0
+}
+```
+
+### Response
+
+```json
+{
+  "code": "S200",
+  "message": "요청이 성공적으로 처리되었습니다.",
+  "data": {
+    "email": "user@example.com",
+    "name": "홍길동",
+    "profileImageUrl": "https://example.com/profile.jpg",
+    "weightKg": 72.5,
+    "heightCm": 175.0,
+    "provider": "GOOGLE"
+  }
+}
+```
+
+---
+
+## 1-3. 연속 달리기 기록 조회
+
+### Request
+
+**GET** `/api/user/streak`
+
+* Bearer Token 필요
+
+### Response
+
+```json
+{
+  "code": "S200",
+  "message": "요청이 성공적으로 처리되었습니다.",
+  "data": {
+    "currentStreak": 5,
+    "maxStreak": 12,
+    "ranToday": true
+  }
+}
+```
+
+> - `currentStreak` : 오늘 기준 현재 연속 달리기 일수 (오늘 또는 어제 달리지 않았으면 0)
+> - `maxStreak` : 역대 최대 연속 달리기 일수
+> - `ranToday` : 오늘 달리기 세션 완료 여부
+
+---
+
 # 2. 달리기(Run)
 
 ## 2-1. 달리기 세션 시작
@@ -386,39 +448,4 @@
 | E404 | 요청 리소스를 찾을 수 없습니다. |
 | E500 | 서버 내부 오류가 발생했습니다.  |
 
-```
-```
-
----
-
-# User body info update
-
-## Request
-
-**PATCH** `/api/user/body-info`
-
-* Bearer Token required
-
-```json
-{
-  "weightKg": 72.5,
-  "heightCm": 175.0
-}
-```
-
-## Response
-
-```json
-{
-  "code": "S200",
-  "message": "요청이 성공적으로 처리되었습니다.",
-  "data": {
-    "email": "user@example.com",
-    "name": "홍길동",
-    "profileImageUrl": "https://example.com/profile.jpg",
-    "weightKg": 72.5,
-    "heightCm": 175.0,
-    "provider": "GOOGLE"
-  }
-}
 ```

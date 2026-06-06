@@ -46,6 +46,14 @@ public class User extends BaseEntity {
     @Column(name = "height_cm", nullable = false, columnDefinition = "double precision default 170.0")
     private Double heightCm = 170.0;
 
+    @Builder.Default
+    @Column(name = "current_streak", nullable = false, columnDefinition = "integer default 0")
+    private Integer currentStreak = 0;
+
+    @Builder.Default
+    @Column(name = "max_streak", nullable = false, columnDefinition = "integer default 0")
+    private Integer maxStreak = 0;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private AuthProvider provider;

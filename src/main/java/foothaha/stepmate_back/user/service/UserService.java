@@ -1,5 +1,7 @@
 package foothaha.stepmate_back.user.service;
 
+import foothaha.stepmate_back.run.repository.RunSessionRepository;
+import foothaha.stepmate_back.user.dto.StreakResponse;
 import foothaha.stepmate_back.user.dto.UserResponse;
 import foothaha.stepmate_back.user.entity.AuthProvider;
 import foothaha.stepmate_back.user.entity.User;
@@ -8,11 +10,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.TreeSet;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
+    private final RunSessionRepository runSessionRepository;
 
     @Transactional
     public User upsertGoogleUser(String providerId, String email, String name, String pictureUrl) {
@@ -63,6 +71,68 @@ public class UserService {
         user.setWeightKg(weightKg);
         user.setHeightCm(heightCm);
         return UserResponse.from(user);
+    }
+
+    @Transactional
+    public StreakResponse getStreak(String email) {
+        User user = findByEmail(email);
+
+        List<LocalDateTime> rawDates = runSessionRepository.findFinishedStartedAtByUser(user);
+
+        // 날짜만 추출 후 중복 제거, 내림차순 정렬
+        TreeSet<LocalDate> dates = new TreeSet<>((a, b) -> b.compareTo(a));
+        for (LocalDateTime dt : rawDates) {
+            dates.add(dt.toLocalDate());
+        }
+        List<LocalDate> sortedDates = List.copyOf(dates);
+
+        LocalDate today = LocalDate.now();
+        boolean ranToday = sortedDates.contains(today);
+        int currentStreak = calcCurrentStreak(sortedDates, today);
+        int maxStreak = Math.max(calcMaxStreak(sortedDates), user.getMaxStreak());
+
+        user.setCurrentStreak(currentStreak);
+        user.setMaxStreak(maxStreak);
+
+        return StreakResponse.builder()
+                .currentStreak(currentStreak)
+                .maxStreak(maxStreak)
+                .ranToday(ranToday)
+                .build();
+    }
+
+    private int calcCurrentStreak(List<LocalDate> sortedDatesDesc, LocalDate today) {
+        if (sortedDatesDesc.isEmpty()) return 0;
+
+        LocalDate cursor = sortedDatesDesc.get(0);
+        // 오늘 또는 어제부터 시작하지 않으면 streak 없음
+        if (!cursor.equals(today) && !cursor.equals(today.minusDays(1))) return 0;
+
+        int streak = 0;
+        for (LocalDate date : sortedDatesDesc) {
+            if (date.equals(cursor)) {
+                streak++;
+                cursor = cursor.minusDays(1);
+            } else {
+                break;
+            }
+        }
+        return streak;
+    }
+
+    private int calcMaxStreak(List<LocalDate> sortedDatesDesc) {
+        if (sortedDatesDesc.isEmpty()) return 0;
+
+        int max = 1, current = 1;
+        for (int i = 1; i < sortedDatesDesc.size(); i++) {
+            if (sortedDatesDesc.get(i).equals(sortedDatesDesc.get(i - 1).minusDays(1))) {
+                current++;
+                if (current > max) max = current;
+            } else {
+                current = 1;
+            }
+        }
+        return max;
     }
 
     private User findByEmail(String email) {

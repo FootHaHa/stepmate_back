@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface RunSessionRepository extends JpaRepository<RunSession, Long> {
@@ -33,4 +34,7 @@ public interface RunSessionRepository extends JpaRepository<RunSession, Long> {
             @Param("start") LocalDateTime start,
             @Param("end") LocalDateTime end,
             @Param("status") RunSessionStatus status);
+
+    @Query("SELECT s.startedAt FROM RunSession s WHERE s.user = :user AND s.status = 'FINISHED' ORDER BY s.startedAt DESC")
+    List<LocalDateTime> findFinishedStartedAtByUser(@Param("user") User user);
 }

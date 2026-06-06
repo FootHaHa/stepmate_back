@@ -263,6 +263,40 @@
 
 ---
 
+## 4-3. 최근 30일 통계 조회
+
+### Request
+
+**GET** `/api/run/monthly-stats`
+
+* Bearer Token 필요
+
+### Response
+
+```json
+{
+  "code": "S200",
+  "message": "요청이 성공적으로 처리되었습니다.",
+  "data": {
+    "avgLeftLandingType": "CLASS3",
+    "avgRightLandingType": "CLASS1",
+    "totalDurationSeconds": 7200,
+    "totalDistanceKm": 15.4,
+    "averagePace": 467.53,
+    "totalCalories": 520.0
+  }
+}
+```
+
+> - `avgLeftLandingType` : 최근 30일 왼발 착지 유형 최빈값 (`CLASS1` / `CLASS2` / `CLASS3`)
+> - `avgRightLandingType` : 최근 30일 오른발 착지 유형 최빈값
+> - `totalDurationSeconds` : 최근 30일 총 달리기 시간 (초)
+> - `totalDistanceKm` : 최근 30일 총 달리기 거리 (km)
+> - `averagePace` : 최근 30일 평균 페이스 (초/km)
+> - `totalCalories` : 최근 30일 총 소모 칼로리 (kcal)
+
+---
+
 ## 4-4. 월별 레포트 조회
 
 ### Request

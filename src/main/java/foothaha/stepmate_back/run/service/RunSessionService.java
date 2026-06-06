@@ -2,6 +2,7 @@ package foothaha.stepmate_back.run.service;
 
 import foothaha.stepmate_back.run.dto.DailySessionResponse;
 import foothaha.stepmate_back.run.dto.MonthlySessionResponse;
+import foothaha.stepmate_back.run.dto.MonthlyStatsResponse;
 import foothaha.stepmate_back.run.dto.RunSessionStartResponse;
 import foothaha.stepmate_back.run.dto.SessionSummaryResponse;
 import foothaha.stepmate_back.run.dto.TodaySummaryResponse;
@@ -109,6 +110,61 @@ public class RunSessionService {
                 .totalDistanceKm(totalDistanceKm)
                 .averagePace(averagePace)
                 .averageBalanceScore(averageBalanceScore)
+                .build();
+    }
+
+    public MonthlyStatsResponse getMonthlyStats(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+        LocalDate today = LocalDate.now();
+        LocalDate thirtyDaysAgo = today.minusDays(29);
+
+        List<RunSession> sessions = runSessionRepository.findByUserAndDateWithSummary(
+                user,
+                thirtyDaysAgo.atStartOfDay(),
+                today.plusDays(1).atStartOfDay(),
+                RunSessionStatus.FINISHED);
+
+        List<SessionSummary> summaries = sessions.stream()
+                .map(RunSession::getSessionSummary)
+                .filter(Objects::nonNull)
+                .toList();
+
+        long totalDurationSeconds = sessions.stream()
+                .filter(s -> s.getDurationSeconds() != null)
+                .mapToLong(RunSession::getDurationSeconds)
+                .sum();
+
+        double totalDistanceKm = summaries.stream()
+                .filter(s -> s.getTotalDistanceKm() != null)
+                .mapToDouble(SessionSummary::getTotalDistanceKm)
+                .sum();
+
+        double averagePace = totalDistanceKm > 0 ? (double) totalDurationSeconds / totalDistanceKm : 0.0;
+
+        double totalCalories = summaries.stream()
+                .filter(s -> s.getCalories() != null)
+                .mapToDouble(SessionSummary::getCalories)
+                .sum();
+
+        LandingType avgLeftLandingType = majorityVote(summaries.stream()
+                .map(SessionSummary::getLeftLandingType)
+                .filter(Objects::nonNull)
+                .toList());
+
+        LandingType avgRightLandingType = majorityVote(summaries.stream()
+                .map(SessionSummary::getRightLandingType)
+                .filter(Objects::nonNull)
+                .toList());
+
+        return MonthlyStatsResponse.builder()
+                .avgLeftLandingType(avgLeftLandingType)
+                .avgRightLandingType(avgRightLandingType)
+                .totalDurationSeconds(totalDurationSeconds)
+                .totalDistanceKm(totalDistanceKm)
+                .averagePace(averagePace)
+                .totalCalories(totalCalories)
                 .build();
     }
 

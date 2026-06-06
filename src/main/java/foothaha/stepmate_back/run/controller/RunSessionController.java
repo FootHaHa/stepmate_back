@@ -5,6 +5,7 @@ import foothaha.stepmate_back.response.ResponseBuilder;
 import foothaha.stepmate_back.run.dto.DailySessionResponse;
 import foothaha.stepmate_back.run.dto.FinishSessionRequest;
 import foothaha.stepmate_back.run.dto.MonthlySessionResponse;
+import foothaha.stepmate_back.run.dto.MonthlyStatsResponse;
 import foothaha.stepmate_back.run.dto.RunSessionStartResponse;
 import foothaha.stepmate_back.run.dto.SessionSummaryResponse;
 import foothaha.stepmate_back.run.dto.TodaySummaryResponse;
@@ -68,6 +69,13 @@ public class RunSessionController {
             Authentication authentication) {
         return ResponseEntity.ok(ResponseBuilder.success(
                 runSessionService.getTodaySummary(authentication.getName())));
+    }
+
+    @GetMapping("/monthly-stats")
+    public ResponseEntity<CommonResponse<MonthlyStatsResponse>> getMonthlyStats(
+            Authentication authentication) {
+        return ResponseEntity.ok(ResponseBuilder.success(
+                runSessionService.getMonthlyStats(authentication.getName())));
     }
 
     @GetMapping("/daily")

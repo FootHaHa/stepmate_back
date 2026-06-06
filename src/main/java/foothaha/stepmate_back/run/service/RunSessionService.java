@@ -124,14 +124,18 @@ public class RunSessionService {
                 user,
                 thirtyDaysAgo.atStartOfDay(),
                 today.plusDays(1).atStartOfDay(),
-                RunSessionStatus.FINISHED);
+                RunSessionStatus.FINISHED
+        );
 
-        List<SessionSummary> summaries = sessions.stream()
-                .map(RunSession::getSessionSummary)
-                .filter(Objects::nonNull)
+        List<RunSession> sessionsWithSummary = sessions.stream()
+                .filter(s -> s.getSessionSummary() != null)
                 .toList();
 
-        long totalDurationSeconds = sessions.stream()
+        List<SessionSummary> summaries = sessionsWithSummary.stream()
+                .map(RunSession::getSessionSummary)
+                .toList();
+
+        long totalDurationSeconds = sessionsWithSummary.stream()
                 .filter(s -> s.getDurationSeconds() != null)
                 .mapToLong(RunSession::getDurationSeconds)
                 .sum();
@@ -141,7 +145,9 @@ public class RunSessionService {
                 .mapToDouble(SessionSummary::getTotalDistanceKm)
                 .sum();
 
-        double averagePace = totalDistanceKm > 0 ? (double) totalDurationSeconds / totalDistanceKm : 0.0;
+        double averagePace = totalDistanceKm > 0
+                ? (double) totalDurationSeconds / totalDistanceKm
+                : 0.0;
 
         double totalCalories = summaries.stream()
                 .filter(s -> s.getCalories() != null)

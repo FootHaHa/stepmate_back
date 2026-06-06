@@ -4,6 +4,7 @@ import foothaha.stepmate_back.run.dto.DailySessionResponse;
 import foothaha.stepmate_back.run.dto.MonthlySessionResponse;
 import foothaha.stepmate_back.run.dto.RunSessionStartResponse;
 import foothaha.stepmate_back.run.dto.SessionSummaryResponse;
+import foothaha.stepmate_back.run.dto.TodaySummaryResponse;
 import foothaha.stepmate_back.run.entity.LandingType;
 import foothaha.stepmate_back.run.entity.RunSession;
 import foothaha.stepmate_back.run.entity.RunSessionStatus;
@@ -72,6 +73,45 @@ public class RunSessionService {
         return SessionSummaryResponse.from(summary);
     }
 
+    public TodaySummaryResponse getTodaySummary(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        LocalDate today = LocalDate.now();
+        List<RunSession> sessions = runSessionRepository.findByUserAndDateWithSummary(
+                user,
+                today.atStartOfDay(),
+                today.plusDays(1).atStartOfDay(),
+                RunSessionStatus.FINISHED);
+
+        List<SessionSummary> summaries = sessions.stream()
+                .map(RunSession::getSessionSummary)
+                .filter(s -> s != null && s.getTotalDistanceKm() != null && s.getTotalDistanceKm() > 0)
+                .toList();
+
+        double totalDistanceKm = summaries.stream()
+                .mapToDouble(SessionSummary::getTotalDistanceKm)
+                .sum();
+
+        double totalDurationSeconds = sessions.stream()
+                .filter(s -> s.getDurationSeconds() != null)
+                .mapToDouble(RunSession::getDurationSeconds)
+                .sum();
+
+        double averagePace = totalDistanceKm > 0 ? totalDurationSeconds / totalDistanceKm : 0.0;
+
+        double averageBalanceScore = summaries.stream()
+                .filter(s -> s.getBalanceScore() != null)
+                .mapToDouble(SessionSummary::getBalanceScore)
+                .average()
+                .orElse(0.0);
+
+        return TodaySummaryResponse.builder()
+                .totalDistanceKm(totalDistanceKm)
+                .averagePace(averagePace)
+                .averageBalanceScore(averageBalanceScore)
+                .build();
+    }
+
     @Transactional
     public RunSessionStartResponse startRun(String email) {
         User user = userRepository.findByEmail(email)
@@ -128,7 +168,12 @@ public class RunSessionService {
 
         double balanceScore = calcBalanceScore(avgLeftPressure, avgRightPressure);
         double weightKg = session.getUser().getWeightKg();
+        double heightCm = session.getUser().getHeightCm();
         double calories = totalSteps * 0.0005 * weightKg;
+        double totalDistanceKm = totalSteps * (heightCm * 0.43 / 100.0) / 1000.0;
+        Integer durationSec = session.getDurationSeconds();
+        double averagePace = (durationSec != null && totalDistanceKm > 0)
+                ? durationSec / totalDistanceKm : 0.0;
 
         LandingType leftLandingType  = classifyFoot(leftData);
         LandingType rightLandingType = classifyFoot(rightData);
@@ -136,6 +181,8 @@ public class RunSessionService {
         SessionSummary summary = SessionSummary.builder()
                 .runSession(session)
                 .totalSteps(totalSteps)
+                .totalDistanceKm(totalDistanceKm)
+                .averagePace(averagePace)
                 .calories(calories)
                 .avgT1Left(avgT1Left)
                 .avgM5Left(avgM5Left)

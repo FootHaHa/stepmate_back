@@ -19,6 +19,8 @@ public class SessionSummaryResponse {
     private Integer durationSeconds;
 
     private Integer totalSteps;
+    private Double totalDistanceKm;
+    private Double averagePace;
     private Double calories;
 
     private Double avgT1Left;
@@ -49,6 +51,8 @@ public class SessionSummaryResponse {
                 .endedAt(summary.getRunSession().getEndedAt() != null ? summary.getRunSession().getEndedAt().toString() : null)
                 .durationSeconds(summary.getRunSession().getDurationSeconds())
                 .totalSteps(summary.getTotalSteps())
+                .totalDistanceKm(summary.getTotalDistanceKm())
+                .averagePace(summary.getAveragePace())
                 .calories(summary.getCalories())
                 .avgT1Left(summary.getAvgT1Left())
                 .avgM5Left(summary.getAvgM5Left())

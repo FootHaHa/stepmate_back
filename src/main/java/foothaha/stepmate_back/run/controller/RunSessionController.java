@@ -7,6 +7,7 @@ import foothaha.stepmate_back.run.dto.FinishSessionRequest;
 import foothaha.stepmate_back.run.dto.MonthlySessionResponse;
 import foothaha.stepmate_back.run.dto.RunSessionStartResponse;
 import foothaha.stepmate_back.run.dto.SessionSummaryResponse;
+import foothaha.stepmate_back.run.dto.TodaySummaryResponse;
 import foothaha.stepmate_back.run.service.RunSessionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -60,6 +61,13 @@ public class RunSessionController {
             @PathVariable Long runSessionId) {
         runSessionService.deleteSession(authentication.getName(), runSessionId);
         return ResponseEntity.ok(ResponseBuilder.success(null));
+    }
+
+    @GetMapping("/today")
+    public ResponseEntity<CommonResponse<TodaySummaryResponse>> getTodaySummary(
+            Authentication authentication) {
+        return ResponseEntity.ok(ResponseBuilder.success(
+                runSessionService.getTodaySummary(authentication.getName())));
     }
 
     @GetMapping("/daily")

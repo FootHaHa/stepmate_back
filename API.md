@@ -207,6 +207,8 @@
     "endedAt": "2026-06-02T09:30:00",
     "durationSeconds": 1800,
     "totalSteps": 3200,
+    "totalDistanceKm": 2.34,
+    "averagePace": 769.23,
     "calories": 128.0,
 
     "avgT1Left": 245.1,
@@ -233,7 +235,35 @@
 
 ---
 
-## 4-2. 월별 레포트 조회
+## 4-2. 오늘 하루 통합 요약 조회
+
+### Request
+
+**GET** `/api/run/today`
+
+* Bearer Token 필요
+
+### Response
+
+```json
+{
+  "code": "S200",
+  "message": "요청이 성공적으로 처리되었습니다.",
+  "data": {
+    "totalDistanceKm": 5.12,
+    "averagePace": 352.34,
+    "averageBalanceScore": 97.5
+  }
+}
+```
+
+> - `totalDistanceKm` : 오늘 완료된 세션의 거리 합산 (km)
+> - `averagePace` : 오늘 전체 운동 시간 / 전체 거리 (초/km)
+> - `averageBalanceScore` : 오늘 세션들의 보행 균형 점수 평균
+
+---
+
+## 4-4. 월별 레포트 조회
 
 ### Request
 
@@ -263,7 +293,7 @@
 
 ---
 
-## 4-3. 일별 레포트 조회
+## 4-5. 일별 레포트 조회
 
 ### Request
 

@@ -180,6 +180,14 @@
 | `pressure4` | 발 뒤꿈치 (heel) |
 | `pressure5` | 중족부 (MF) |
 
+### FootType 값 설명
+
+| 값 | 설명 |
+| --- | --- |
+| `NORMAL` | 일반 |
+| `DUCK_FOOT` | 팔자 |
+| `PIGEON_TOE` | 안짱 |
+
 ### Request
 
 **POST** `/api/sensor/batch`
@@ -199,12 +207,8 @@
       "pressure3": 98,
       "pressure4": 110,
       "pressure5": 95,
-      "accelX": 0.12,
-      "accelY": -0.34,
-      "accelZ": 9.81,
-      "gyroX": 0.01,
-      "gyroY": 0.02,
-      "gyroZ": -0.01
+      "footType": "NORMAL",
+      "groundAngle": 2.5
     },
     {
       "stepNumber": 2,
@@ -215,12 +219,8 @@
       "pressure3": 100,
       "pressure4": 108,
       "pressure5": 90,
-      "accelX": -0.05,
-      "accelY": 0.20,
-      "accelZ": 9.79,
-      "gyroX": 0.00,
-      "gyroY": -0.01,
-      "gyroZ": 0.03
+      "footType": "DUCK_FOOT",
+      "groundAngle": -1.3
     }
   ]
 }

@@ -60,27 +60,16 @@ public class SensorRawData {
     private Integer pressure5;
 
     // =========================
-    // 가속도 센서
+    // 걸음 유형 (팔자/안짱/일반)
     // =========================
+    @Enumerated(EnumType.STRING)
     @Column
-    private Double accelX;
-
-    @Column
-    private Double accelY;
-
-    @Column
-    private Double accelZ;
+    private FootType footType;
 
     // =========================
-    // 자이로 센서
+    // 지면 각도
     // =========================
     @Column
-    private Double gyroX;
-
-    @Column
-    private Double gyroY;
-
-    @Column
-    private Double gyroZ;
+    private Double groundAngle;
 
 }

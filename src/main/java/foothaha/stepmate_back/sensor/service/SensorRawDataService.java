@@ -40,12 +40,8 @@ public class SensorRawDataService {
                         .pressure3(item.getPressure3())
                         .pressure4(item.getPressure4())
                         .pressure5(item.getPressure5())
-                        .accelX(item.getAccelX())
-                        .accelY(item.getAccelY())
-                        .accelZ(item.getAccelZ())
-                        .gyroX(item.getGyroX())
-                        .gyroY(item.getGyroY())
-                        .gyroZ(item.getGyroZ())
+                        .footType(item.getFootType())
+                        .groundAngle(item.getGroundAngle())
                         .build())
                 .toList();
 

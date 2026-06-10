@@ -376,22 +376,27 @@ public class RunSessionService {
 
         if (steps.isEmpty()) return new long[]{0L, 0L, 0L};
 
-        long uphillSeconds = 0, downhillSeconds = 0, flatSeconds = 0;
+        long uphillMillis = 0, downhillMillis = 0, flatMillis = 0;
         for (int i = 0; i < steps.size(); i++) {
             LocalDateTime nextStart = (i + 1 < steps.size())
                     ? steps.get(i + 1).startAt()
                     : sessionEnd;
             if (nextStart == null) continue;
 
-            long stepSec = Duration.between(steps.get(i).startAt(), nextStart).toSeconds();
+            long stepMillis = Duration.between(steps.get(i).startAt(), nextStart).toMillis();
+            if (stepMillis <= 0) continue;
             double angle = steps.get(i).angle();
 
-            if (angle >= 5.0)       uphillSeconds   += stepSec;
-            else if (angle <= -5.0) downhillSeconds += stepSec;
-            else                    flatSeconds     += stepSec;
+            if (angle >= 5.0)       uphillMillis   += stepMillis;
+            else if (angle <= -5.0) downhillMillis += stepMillis;
+            else                    flatMillis     += stepMillis;
         }
 
-        return new long[]{uphillSeconds, downhillSeconds, flatSeconds};
+        return new long[]{
+                Math.round(uphillMillis / 1000.0),
+                Math.round(downhillMillis / 1000.0),
+                Math.round(flatMillis / 1000.0)
+        };
     }
 
     private double calcBalanceScore(double left, double right) {

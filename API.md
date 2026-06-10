@@ -290,10 +290,25 @@
     "balanceScore": 99.17,
 
     "leftLandingType": "CLASS3",
-    "rightLandingType": "CLASS1"
+    "rightLandingType": "CLASS1",
+
+    "uphillSeconds": 420,
+    "downhillSeconds": 180,
+    "flatSeconds": 1200
   }
 }
 ```
+
+### 경사 구간 시간 설명
+
+| 필드 | 설명 | 분류 기준 (groundAngle 기준) |
+| --- | --- | --- |
+| `uphillSeconds` | 오르막 구간 소요 시간 (초) | `groundAngle >= 5.0°` |
+| `downhillSeconds` | 내리막 구간 소요 시간 (초) | `groundAngle <= -5.0°` |
+| `flatSeconds` | 평지 구간 소요 시간 (초) | `-5.0° < groundAngle < 5.0°` |
+
+* `groundAngle`은 프론트엔드에서 EMA 평활(α=0.03) 처리 후 전송된 값
+* 각 스텝의 실제 타임스탬프 간격으로 시간을 산출하므로 걷기/달리기 속도 차이가 반영됨
 
 ---
 

@@ -240,6 +240,11 @@ public class RunSessionService {
         LandingType leftLandingType  = classifyFoot(leftData);
         LandingType rightLandingType = classifyFoot(rightData);
 
+        long[] slopeTimes = calcSlopeTimes(allData, session.getEndedAt());
+        long uphillSeconds   = slopeTimes[0];
+        long downhillSeconds = slopeTimes[1];
+        long flatSeconds     = slopeTimes[2];
+
         SessionSummary summary = SessionSummary.builder()
                 .runSession(session)
                 .totalSteps(totalSteps)
@@ -261,6 +266,9 @@ public class RunSessionService {
                 .balanceScore(balanceScore)
                 .leftLandingType(leftLandingType)
                 .rightLandingType(rightLandingType)
+                .uphillSeconds(uphillSeconds)
+                .downhillSeconds(downhillSeconds)
+                .flatSeconds(flatSeconds)
                 .build();
 
         sessionSummaryRepository.save(summary);
@@ -343,6 +351,47 @@ public class RunSessionService {
                 .max(Map.Entry.comparingByValue())
                 .map(Map.Entry::getKey)
                 .orElse(LandingType.CLASS3);
+    }
+
+    private long[] calcSlopeTimes(List<SensorRawData> allData, LocalDateTime sessionEnd) {
+        record StepInfo(LocalDateTime startAt, double angle) {}
+
+        List<StepInfo> steps = allData.stream()
+                .filter(d -> d.getGroundAngle() != null)
+                .collect(Collectors.groupingBy(SensorRawData::getStepNumber))
+                .values().stream()
+                .map(group -> {
+                    LocalDateTime start = group.stream()
+                            .map(SensorRawData::getMeasuredAt)
+                            .min(Comparator.naturalOrder())
+                            .orElseThrow();
+                    double angle = group.stream()
+                            .mapToDouble(SensorRawData::getGroundAngle)
+                            .average()
+                            .orElse(0.0);
+                    return new StepInfo(start, angle);
+                })
+                .sorted(Comparator.comparing(StepInfo::startAt))
+                .toList();
+
+        if (steps.isEmpty()) return new long[]{0L, 0L, 0L};
+
+        long uphillSeconds = 0, downhillSeconds = 0, flatSeconds = 0;
+        for (int i = 0; i < steps.size(); i++) {
+            LocalDateTime nextStart = (i + 1 < steps.size())
+                    ? steps.get(i + 1).startAt()
+                    : sessionEnd;
+            if (nextStart == null) continue;
+
+            long stepSec = Duration.between(steps.get(i).startAt(), nextStart).toSeconds();
+            double angle = steps.get(i).angle();
+
+            if (angle >= 5.0)       uphillSeconds   += stepSec;
+            else if (angle <= -5.0) downhillSeconds += stepSec;
+            else                    flatSeconds     += stepSec;
+        }
+
+        return new long[]{uphillSeconds, downhillSeconds, flatSeconds};
     }
 
     private double calcBalanceScore(double left, double right) {

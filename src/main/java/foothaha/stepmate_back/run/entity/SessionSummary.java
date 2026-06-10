@@ -57,4 +57,12 @@ public class SessionSummary extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private LandingType rightLandingType;
 
+    // =========================
+    // 경사 구간 시간
+    // =========================
+
+    private Long uphillSeconds;
+    private Long downhillSeconds;
+    private Long flatSeconds;
+
 }

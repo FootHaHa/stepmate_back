@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -77,7 +78,7 @@ public class RunSessionService {
     public TodaySummaryResponse getTodaySummary(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
-        LocalDate today = LocalDate.now();
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
         List<RunSession> sessions = runSessionRepository.findByUserAndDateWithSummary(
                 user,
                 today.atStartOfDay(),
@@ -117,7 +118,7 @@ public class RunSessionService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
-        LocalDate today = LocalDate.now();
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
         LocalDate thirtyDaysAgo = today.minusDays(29);
 
         List<RunSession> sessions = runSessionRepository.findByUserAndDateWithSummary(

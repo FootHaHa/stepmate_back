@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -86,7 +87,7 @@ public class UserService {
         }
         List<LocalDate> sortedDates = List.copyOf(dates);
 
-        LocalDate today = LocalDate.now();
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
         boolean ranToday = sortedDates.contains(today);
         int currentStreak = calcCurrentStreak(sortedDates, today);
         int maxStreak = Math.max(calcMaxStreak(sortedDates), user.getMaxStreak());

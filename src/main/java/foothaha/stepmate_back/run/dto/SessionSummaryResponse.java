@@ -43,6 +43,10 @@ public class SessionSummaryResponse {
     private LandingType leftLandingType;
     private LandingType rightLandingType;
 
+    private Long uphillSeconds;
+    private Long downhillSeconds;
+    private Long flatSeconds;
+
     public static SessionSummaryResponse from(SessionSummary summary) {
         return SessionSummaryResponse.builder()
                 .summaryId(summary.getSummaryId())
@@ -69,6 +73,9 @@ public class SessionSummaryResponse {
                 .balanceScore(summary.getBalanceScore())
                 .leftLandingType(summary.getLeftLandingType())
                 .rightLandingType(summary.getRightLandingType())
+                .uphillSeconds(summary.getUphillSeconds())
+                .downhillSeconds(summary.getDownhillSeconds())
+                .flatSeconds(summary.getFlatSeconds())
                 .build();
     }
 }

@@ -294,7 +294,11 @@
 
     "uphillSeconds": 420,
     "downhillSeconds": 180,
-    "flatSeconds": 1200
+    "flatSeconds": 1200,
+
+    "normalRatio": 65.0,
+    "duckFootRatio": 25.0,
+    "pigeonToeRatio": 10.0
   }
 }
 ```

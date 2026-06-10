@@ -13,6 +13,7 @@ import foothaha.stepmate_back.run.entity.SessionSummary;
 import foothaha.stepmate_back.run.repository.RunSessionRepository;
 import foothaha.stepmate_back.run.repository.SessionSummaryRepository;
 import foothaha.stepmate_back.sensor.entity.FootSide;
+import foothaha.stepmate_back.sensor.entity.FootType;
 import foothaha.stepmate_back.sensor.entity.SensorRawData;
 import foothaha.stepmate_back.sensor.repository.SensorRawDataRepository;
 import foothaha.stepmate_back.user.entity.User;
@@ -72,7 +73,11 @@ public class RunSessionService {
     public SessionSummaryResponse getSummary(Long runSessionId) {
         SessionSummary summary = sessionSummaryRepository.findByRunSession_SessionId(runSessionId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 세션의 요약 정보를 찾을 수 없습니다."));
-        return SessionSummaryResponse.from(summary);
+
+        List<SensorRawData> rawData = sensorRawDataRepository.findByRunSession_SessionId(runSessionId);
+        double[] footTypeRatios = calcFootTypeRatios(rawData);
+
+        return SessionSummaryResponse.from(summary, footTypeRatios[0], footTypeRatios[1], footTypeRatios[2]);
     }
 
     public TodaySummaryResponse getTodaySummary(String email) {
@@ -397,6 +402,27 @@ public class RunSessionService {
                 Math.round(uphillMillis / 1000.0),
                 Math.round(downhillMillis / 1000.0),
                 Math.round(flatMillis / 1000.0)
+        };
+    }
+
+    // returns [normalRatio, duckFootRatio, pigeonToeRatio] as percentages (0~100)
+    private double[] calcFootTypeRatios(List<SensorRawData> data) {
+        List<FootType> types = data.stream()
+                .map(SensorRawData::getFootType)
+                .filter(Objects::nonNull)
+                .toList();
+
+        long total = types.size();
+        if (total == 0) return new double[]{0.0, 0.0, 0.0};
+
+        long normalCount    = types.stream().filter(t -> t == FootType.NORMAL).count();
+        long duckFootCount  = types.stream().filter(t -> t == FootType.DUCK_FOOT).count();
+        long pigeonToeCount = types.stream().filter(t -> t == FootType.PIGEON_TOE).count();
+
+        return new double[]{
+                Math.round(normalCount    * 1000.0 / total) / 10.0,
+                Math.round(duckFootCount  * 1000.0 / total) / 10.0,
+                Math.round(pigeonToeCount * 1000.0 / total) / 10.0
         };
     }
 

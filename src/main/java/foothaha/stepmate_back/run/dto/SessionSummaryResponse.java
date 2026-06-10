@@ -47,7 +47,14 @@ public class SessionSummaryResponse {
     private Long downhillSeconds;
     private Long flatSeconds;
 
-    public static SessionSummaryResponse from(SessionSummary summary) {
+    private Double normalRatio;
+    private Double duckFootRatio;
+    private Double pigeonToeRatio;
+
+    public static SessionSummaryResponse from(SessionSummary summary,
+                                              double normalRatio,
+                                              double duckFootRatio,
+                                              double pigeonToeRatio) {
         return SessionSummaryResponse.builder()
                 .summaryId(summary.getSummaryId())
                 .runSessionId(summary.getRunSession().getSessionId())
@@ -76,6 +83,9 @@ public class SessionSummaryResponse {
                 .uphillSeconds(summary.getUphillSeconds())
                 .downhillSeconds(summary.getDownhillSeconds())
                 .flatSeconds(summary.getFlatSeconds())
+                .normalRatio(normalRatio)
+                .duckFootRatio(duckFootRatio)
+                .pigeonToeRatio(pigeonToeRatio)
                 .build();
     }
 }

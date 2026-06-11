@@ -170,6 +170,18 @@ public class RunSessionService {
                 .filter(Objects::nonNull)
                 .toList());
 
+        // 30일 평균 센서 압력
+        double avgT1Left    = avgSensor(summaries, SessionSummary::getAvgT1Left);
+        double avgM5Left    = avgSensor(summaries, SessionSummary::getAvgM5Left);
+        double avgM1Left    = avgSensor(summaries, SessionSummary::getAvgM1Left);
+        double avgHeelLeft  = avgSensor(summaries, SessionSummary::getAvgHeelLeft);
+        double avgMFLeft    = avgSensor(summaries, SessionSummary::getAvgMFLeft);
+        double avgT1Right   = avgSensor(summaries, SessionSummary::getAvgT1Right);
+        double avgM5Right   = avgSensor(summaries, SessionSummary::getAvgM5Right);
+        double avgM1Right   = avgSensor(summaries, SessionSummary::getAvgM1Right);
+        double avgHeelRight = avgSensor(summaries, SessionSummary::getAvgHeelRight);
+        double avgMFRight   = avgSensor(summaries, SessionSummary::getAvgMFRight);
+
         return MonthlyStatsResponse.builder()
                 .avgLeftLandingType(avgLeftLandingType)
                 .avgRightLandingType(avgRightLandingType)
@@ -177,7 +189,27 @@ public class RunSessionService {
                 .totalDistanceKm(totalDistanceKm)
                 .averagePace(averagePace)
                 .totalCalories(totalCalories)
+                .avgT1Left(avgT1Left)
+                .avgM5Left(avgM5Left)
+                .avgM1Left(avgM1Left)
+                .avgHeelLeft(avgHeelLeft)
+                .avgMFLeft(avgMFLeft)
+                .avgT1Right(avgT1Right)
+                .avgM5Right(avgM5Right)
+                .avgM1Right(avgM1Right)
+                .avgHeelRight(avgHeelRight)
+                .avgMFRight(avgMFRight)
                 .build();
+    }
+
+    private double avgSensor(List<SessionSummary> summaries,
+                              java.util.function.Function<SessionSummary, Double> getter) {
+        return summaries.stream()
+                .map(getter)
+                .filter(Objects::nonNull)
+                .mapToDouble(Double::doubleValue)
+                .average()
+                .orElse(0.0);
     }
 
     @Transactional

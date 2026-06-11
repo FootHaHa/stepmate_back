@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -40,9 +41,15 @@ public class GameScoreService {
 
     @Transactional(readOnly = true)
     public List<GameRankingEntry> getRanking(String myEmail, String gameMode) {
-        List<GameScore> scores = (gameMode != null && !gameMode.isBlank())
-                ? gameScoreRepository.findTopByGameMode(gameMode)
-                : gameScoreRepository.findTopByPlayTime();
+        List<GameScore> scores;
+        if (gameMode == null || gameMode.isBlank()) {
+            scores = gameScoreRepository.findTopByPlayTime();
+        } else if ("rhythmGame".equals(gameMode)) {
+            scores = gameScoreRepository.findTopByGameModes(
+                    Arrays.asList("rhythmGame", "interval", "highTempo", "lowTempo"));
+        } else {
+            scores = gameScoreRepository.findTopByGameModes(List.of(gameMode));
+        }
         List<GameRankingEntry> result = new ArrayList<>();
         for (int i = 0; i < scores.size(); i++) {
             result.add(new GameRankingEntry(i + 1, scores.get(i), myEmail));

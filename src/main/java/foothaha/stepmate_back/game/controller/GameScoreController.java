@@ -28,11 +28,12 @@ public class GameScoreController {
         return ResponseEntity.ok(ResponseBuilder.success(null));
     }
 
-    // 전체 랭킹 (플레이 시간 순)
+    // 전체 랭킹 (gameMode별 점수 순)
     @GetMapping("/ranking")
     public ResponseEntity<CommonResponse<List<GameRankingEntry>>> getRanking(
-            Authentication authentication) {
-        List<GameRankingEntry> ranking = gameScoreService.getRanking(authentication.getName());
+            Authentication authentication,
+            @RequestParam(required = false, defaultValue = "rhythmGame") String gameMode) {
+        List<GameRankingEntry> ranking = gameScoreService.getRanking(authentication.getName(), gameMode);
         return ResponseEntity.ok(ResponseBuilder.success(ranking));
     }
 

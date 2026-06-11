@@ -39,8 +39,10 @@ public class GameScoreService {
     }
 
     @Transactional(readOnly = true)
-    public List<GameRankingEntry> getRanking(String myEmail) {
-        List<GameScore> scores = gameScoreRepository.findTopByPlayTime();
+    public List<GameRankingEntry> getRanking(String myEmail, String gameMode) {
+        List<GameScore> scores = (gameMode != null && !gameMode.isBlank())
+                ? gameScoreRepository.findTopByGameMode(gameMode)
+                : gameScoreRepository.findTopByPlayTime();
         List<GameRankingEntry> result = new ArrayList<>();
         for (int i = 0; i < scores.size(); i++) {
             result.add(new GameRankingEntry(i + 1, scores.get(i), myEmail));

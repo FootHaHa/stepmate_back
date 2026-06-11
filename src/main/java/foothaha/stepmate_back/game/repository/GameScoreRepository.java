@@ -10,16 +10,14 @@ import java.util.List;
 public interface GameScoreRepository extends JpaRepository<GameScore, Long> {
 
     // 게임 모드별 점수 기준 상위 50명 랭킹
-    // rhythmGame은 구 모드값(interval/highTempo/lowTempo)도 포함
     @Query("""
         SELECT g FROM GameScore g
         JOIN FETCH g.user
-        WHERE g.gameMode = :gameMode
-           OR (:gameMode = 'rhythmGame' AND g.gameMode IN ('interval', 'highTempo', 'lowTempo'))
+        WHERE g.gameMode IN :gameModes
         ORDER BY g.score DESC
         LIMIT 50
     """)
-    List<GameScore> findTopByGameMode(@Param("gameMode") String gameMode);
+    List<GameScore> findTopByGameModes(@Param("gameModes") List<String> gameModes);
 
     // 플레이 시간 합산 기준 상위 50명 랭킹 (하위 호환)
     @Query("""

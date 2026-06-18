@@ -53,6 +53,19 @@ google.oauth.client-ids=<ANDROID_CLIENT_ID>,<WEB_CLIENT_ID>
 
 실제 비밀번호, JWT 비밀키 및 OAuth 설정값은 공개 저장소에 커밋하지 마세요. 배포 환경에서는 환경 변수나 별도의 비밀 관리 도구를 사용하는 것을 권장합니다.
 
+## 프로젝트 구조
+
+```text
+src/main/java/foothaha/stepmate_back/
+├─ auth/       # Google 로그인
+├─ config/     # Spring Security, JWT
+├─ game/       # 게임 점수와 랭킹
+├─ response/   # 공통 응답 및 예외 처리
+├─ run/        # 러닝 세션과 분석 결과
+├─ sensor/     # 스마트 인솔 센서 데이터
+└─ user/       # 사용자 정보
+```
+
 ## 실행하기
 
 Windows:
@@ -90,57 +103,17 @@ Content-Type: application/json
 }
 ```
 
-## 주요 API
+<br>
 
-| 영역 | Method | Endpoint | 설명 |
-| --- | --- | --- | --- |
-| 인증 | `POST` | `/api/auth/google` | Google 로그인 및 JWT 발급 |
-| 사용자 | `GET` | `/api/user/me` | 내 정보 조회 |
-| 사용자 | `PATCH` | `/api/user/body-info` | 키·몸무게 수정 |
-| 사용자 | `GET` | `/api/user/streak` | 연속 운동 기록 조회 |
-| 러닝 | `POST` | `/api/run` | 러닝 세션 시작 |
-| 러닝 | `PATCH` | `/api/run/{id}/finish` | 러닝 세션 종료 |
-| 러닝 | `DELETE` | `/api/run/{id}` | 러닝 세션 삭제 |
-| 리포트 | `GET` | `/api/run/{id}/summary` | 세션 분석 결과 조회 |
-| 리포트 | `GET` | `/api/run/today` | 오늘의 요약 조회 |
-| 리포트 | `GET` | `/api/run/monthly-stats` | 최근 30일 통계 조회 |
-| 리포트 | `GET` | `/api/run/monthly` | 월별 운동 날짜 조회 |
-| 리포트 | `GET` | `/api/run/daily` | 일별 세션 조회 |
-| 센서 | `POST` | `/api/sensor/batch` | 센서 데이터 일괄 저장 |
-| 게임 | `POST` | `/api/game/scores` | 게임 점수 저장 |
-| 게임 | `GET` | `/api/game/ranking` | 게임 랭킹 조회 |
-| 게임 | `GET` | `/api/game/my-best` | 내 최고 점수 조회 |
+## 👥 Contributors
 
-요청 및 응답 예시는 `API.md`에서 확인할 수 있습니다.
-
-## 프로젝트 구조
-
-```text
-src/main/java/foothaha/stepmate_back/
-├─ auth/       # Google 로그인
-├─ config/     # Spring Security, JWT
-├─ game/       # 게임 점수와 랭킹
-├─ response/   # 공통 응답 및 예외 처리
-├─ run/        # 러닝 세션과 분석 결과
-├─ sensor/     # 스마트 인솔 센서 데이터
-└─ user/       # 사용자 정보
-```
-
-## 빌드 및 테스트
-
-Windows:
-
-```powershell
-.\gradlew.bat test
-.\gradlew.bat build
-```
-
-macOS / Linux:
-
-```bash
-./gradlew test
-./gradlew build
-```
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/mainsprout"><img src="https://avatars.githubusercontent.com/u/143585656?s=400&u=c4fc8317d32cc54a7091f164a2667cbbc14fa482&v=4" width="100px;" alt=""/><br /><sub><b>mainsprout</b></sub></a><br />🌱</td>
+    <td align="center"><a href="https://github.com/hym7196"><img src="https://avatars.githubusercontent.com/u/64295988?v=4" width="100px;" alt=""/><br /><sub><b>hym7196</b></sub></a><br />🎨</td>
+    <td align="center"><a href="https://github.com/dusal1111"><img src="https://avatars.githubusercontent.com/u/147612119?v=4" width="100px;" alt=""/><br /><sub><b>dusal1111</b></sub></a><br />🎨</td>
+  </tr>
+</table>
 
 ## 연관 저장소
 

@@ -111,7 +111,7 @@ Content-Type: application/json
 
 <br>
 
-🔗 연관 저장소
+## 🔗 연관 저장소
 
 - Frontend: [FootHaHa/stepmate_front](https://github.com/FootHaHa/stepmate_front)
 - Board: [FootHaHa/stepmate_board](https://github.com/FootHaHa/stepmate_board)
